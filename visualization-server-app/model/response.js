@@ -36,5 +36,4 @@ class Response {
         } //what to multiple value by to get the number of Canadians.
         this.value = value * unitScaler
     }
-
 }
