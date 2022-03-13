@@ -1,13 +1,19 @@
 const e = require('express');
-const client = require('../utils/db.js');
+const mongo = require('../utils/db.js');
 
-async function _get_response_data (){
-    let db = await client.getDb();
-    return await db.collection('datasets');
+/**
+ * Gets the response collection
+ * @returns The response collection from MongoDB
+ */
+async function _get_response_collection() {
+    let db = await mongo.getDb();
+    return await db.collection('response');
 };
 
+
+
 class Response {
-    constructor(geo, ageGroup, sex, question, response, estimate, uom, Scalar_Factor, value) { //Columns B, D, E, F, G, H, I, K and O.  
+    constructor(geo, ageGroup, sex, question, response, estimate, uom, value) { //Columns B, D, E, F, G, H, I, K and O.  
         this.geo = geo //province/region in canada, or Canada as a whole.
         this.ageGroup = ageGroup
         this.sex = sex //male, female or both sexes for aggregate data.
@@ -16,24 +22,16 @@ class Response {
         this.estimate = estimate // One of: Number of Persons, Percentage of Persons, low 95% CI, High 95% CI
         this.unit = uom //whether  this is number of people or percentage of people.
         //Arguably above should be translated, for display purposes, into either "%" or ""
-        if (this.unit != "Persons") {
-            this.unitCount = ""
-        } 
-        else{
-        this.unitCount = unitCount
+        this.value = 0;
+
+        if (this.unit == "Persons") {
+            // I discovered only thousands is used in the dataset
+            this.value = value * 1000
         }
-        if (Scalar_Factor == "hundreds") {
-            this.unitScalar = 100
+        else {  // In this case, this.unit == "Percent" so no multiplication needed
+            this.value = value
         }
-        else if (Scalar_Factor == "thousands") {
-            this.unitScalar = 1000
-        }
-        else if (Scalar_Factor == "millions") {
-            this.unitScalar = 1000000
-        }
-        else{
-            this.unitScalar = 1
-        } //what to multiple value by to get the number of Canadians.
-        this.value = value * unitScaler
     }
+
 }
+module.exports.Response = Response
