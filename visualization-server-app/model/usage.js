@@ -1,5 +1,5 @@
 const e = require('express');
-const client = require('../utils/db.js');
+const client = require('../utils/db');
 
 /**
  * Gets the usage collection
@@ -20,6 +20,12 @@ class Usage {
         //Arguably above should be translated, for display purposes, into either "%" or ""
         //for this model, everything is a percentage - this unit is included for consistency.
         this.value = value 
+    }
+    static async getUsages(){
+
+    let collection = await _get_usage_collection()
+
+
     }
 }
 module.exports.Usage = Usage

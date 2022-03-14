@@ -1,3 +1,9 @@
-//Skeleton from contacts-app-v4
+const Response = require('../model/response').Response;
 const fs = require('fs');
-const v = require('../utils/validate-fields');
+
+
+module.exports.getResponses = async (req,res) =>{
+
+
+
+}
