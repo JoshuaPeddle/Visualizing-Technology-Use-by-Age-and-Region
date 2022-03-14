@@ -13,7 +13,7 @@ async function _get_response_collection() {
 
 
 class Response {
-    constructor(geo, ageGroup, sex, question, response, estimate, uom, value) { //Columns B, D, E, F, G, H, I, K and O.  
+    constructor(geo, ageGroup, sex, question, response, estimate, uom, value) { //Columns B, D, E, F, G, H, I, and O.  of the .csv file.
         this.geo = geo //province/region in canada, or Canada as a whole.
         this.ageGroup = ageGroup
         this.sex = sex //male, female or both sexes for aggregate data.
