@@ -1,6 +1,6 @@
 //code unchanged from contacts-app-v4
 const MongoClient = require("mongodb").MongoClient
-const uri ="mongodb://localhost:27017";
+const uri ="mongodb://0.0.0.0:27017"; //0.0.0.0 doesn't rely on localhost being configured. Ethan's machine doesn't have it configured.
 const client = new MongoClient(uri, { useUnifiedTopology: true });
 var db;
 
