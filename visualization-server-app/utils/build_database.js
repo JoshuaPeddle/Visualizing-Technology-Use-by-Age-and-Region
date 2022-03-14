@@ -44,7 +44,7 @@ async function buildDB() {
 
     // Get our response collection
     let responseCollection = await _get_response_collection();
-    // Read 'datasets\Use of Technology by Age.csv' 
+    // Read 'datasets\Use of Technology by Age.tsv' 
     let responseData = fs.readFileSync("../datasets/Opinions on Technology.tsv", 'utf8');
     // Empty list to store the Response objects
     let responseArray = []
@@ -62,7 +62,7 @@ async function buildDB() {
     await responseCollection.insertMany(responseArray)
 
 
-    // Repeat the above process for 'Use of Technology by Age.csv'
+    // Repeat the above process for 'Use of Technology by Age.tsv'
 
     let usageCollection = await _get_usage_collection();
     let usageData = fs.readFileSync("../datasets/Use of Technology by Age.tsv", 'utf8');

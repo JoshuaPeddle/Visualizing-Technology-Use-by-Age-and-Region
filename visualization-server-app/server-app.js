@@ -18,8 +18,8 @@ async function createServer(){
     //make sure database is working before starting
     await mongo.connectToDB();
     //resource paths
-    app.get('/responses', responses.getResponses); //more specific paths may be required? I'm not positive, since we're pulling all matching only..
-    app.get('/usages', usages.getUsages);
+    app.get('/responses', responseController.getResponses); //more specific paths may be required? I'm not positive, since we're pulling all matching only..
+    app.get('/usages', usageController.getUsages);
     // start the server
     server = app.listen(port, () => {
       console.log('listening at http://localhost:%d', port);
