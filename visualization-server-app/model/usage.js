@@ -1,5 +1,5 @@
 const e = require('express');
-const client = require('../utils/db.js');
+const client = require('../utils/db');
 
 /**
  * Gets the usage collection

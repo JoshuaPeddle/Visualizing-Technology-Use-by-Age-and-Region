@@ -4,12 +4,13 @@ const app = express();
 const port = 3000;
 
 //we may not need these, but left for the moment.
-app.use(express.json());// support json encoded bodies
+//app.use(express.json()); //We don't need this. 
 app.use(express.urlencoded({extended: true}));//incoming objects are strings or arrays
 
 //Import operations here to a const
 const mongo = require('./utils/db.js');
-
+const responseController = require('./controller/responses'); //I... think you can have multiple controllers in MVC,
+const usageController = require('./controller/usages');// but I don't think the course was explicit anywhere.
 var server;
 
 async function createServer(){
@@ -17,7 +18,8 @@ async function createServer(){
     //make sure database is working before starting
     await mongo.connectToDB();
     //resource paths
-
+    app.get('/responses', responses.getResponses); //more specific paths may be required? I'm not positive, since we're pulling all matching only..
+    app.get('/usages', usages.getUsages);
     // start the server
     server = app.listen(port, () => {
       console.log('listening at http://localhost:%d', port);

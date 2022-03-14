@@ -1,5 +1,5 @@
 const e = require('express');
-const mongo = require('../utils/db.js');
+const mongo = require('../utils/db');
 
 /**
  * Gets the response collection
