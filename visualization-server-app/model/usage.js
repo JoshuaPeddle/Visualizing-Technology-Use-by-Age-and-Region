@@ -21,5 +21,12 @@ class Usage {
         //for this model, everything is a percentage - this unit is included for consistency.
         this.value = value 
     }
+    static async getUsages(searchTerms){
+
+    let collection = await _get_usage_collection()
+
+    let matching_responses = await collection.find({searchTerms}).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+    return matching_responses;
+    }
 }
 module.exports.Usage = Usage

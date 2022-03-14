@@ -33,5 +33,12 @@ class Response {
         }
     }
 
+    static async getResponses(searchTerms){
+
+    let collection = await _get_response_collection()
+
+    let matching_responses = await collection.find({searchTerms}).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+    return matching_responses;
+    }
 }
 module.exports.Response = Response
