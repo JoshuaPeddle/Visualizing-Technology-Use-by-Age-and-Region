@@ -1,5 +1,5 @@
 const e = require('express');
-const mongo = require('../utils/db.js');
+const mongo = require('../utils/db');
 
 /**
  * Gets the response collection
@@ -33,5 +33,11 @@ class Response {
         }
     }
 
+    static async getResponses(){
+
+    let collection = await _get_response_collection()
+
+
+    }
 }
 module.exports.Response = Response
