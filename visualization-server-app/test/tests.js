@@ -25,15 +25,21 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
         // Tests for response.js
         describe('Response', function () {
             // Test 1
-            it('Responses placeholder test 1', async function () {
-
+            it('Responses DB correct size', async function () {
+                let res = await instance.get('/responses', { params: {} });
+                // This could be validated better
+                console.log("response DB actual size: "+res.data.length)
+                assert.strictEqual(res.data.length, 62400)
             });
         });
         // Tests for usage.js
         describe('Usage', function () {
             // Test 1
-            it('Usage placeholder test 1', async function () {
-
+            it('Usage DB correct size', async function () {
+                let res = await instance.get('/usages', { params: {} });
+                // This could be validated better
+                console.log("response DB actual size: "+res.data.length)
+                assert.strictEqual(res.data.length, 1200)
             });
         });
     });
@@ -57,6 +63,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 // We're doing a get request, so send our data as params
                 let res = await instance.get('/responses', { params: sampleSearch });
                 // This could be validated better
+                console.log(res.data)
                 assert.strictEqual(res.status, 200); 
             });
 
