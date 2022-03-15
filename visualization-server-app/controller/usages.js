@@ -10,9 +10,9 @@ module.exports.getUsages = async (req, res) => {
     // This is just a simple check to see if anything was returned
     if (objs.length >= 1) {
         // If we have usages, send them to client
-        res.status(200).send(objs)
+        res.send(objs)
     } else {
         // Let the client know no usages were found
-        res.status(200).send("no usages")
+        res.send("no usages")
     }
 }

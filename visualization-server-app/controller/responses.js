@@ -16,9 +16,9 @@ module.exports.getResponses = async (req,res) =>{
     // This is just a simple check to see if anything was returned
     if (objs.length >=1){
         // If we have requests, send them to client
-        res.status(200).send(objs)
+        res.send(objs)
     }else{
         // Let the client know no requests were found
-        res.status(200).send("no responses")
+        res.send("no responses")
     }
 }
