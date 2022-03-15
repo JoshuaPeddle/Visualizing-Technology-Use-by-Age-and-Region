@@ -93,8 +93,8 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     geo: 'Canada',
                 }
                 let res = await instance.get('/usages', { params: sampleSearch });
-                // This could be validated better
-                assert.strictEqual(res.status, 200);
+
+                assert.strictEqual(res.data.length, 200); //200 results are returned, this is not an artifact of status(200)
             });
 
             it('Usages failed retrieval - bad search params', async function () {
@@ -103,7 +103,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     geo: 'USA',
                 }
                 let res = await instance.get('/usages', { params: sampleSearch });
-                // This could be validated better
+                // This could be validated better //Could it?
                 assert.strictEqual(res.data, 'no usages'); 
             });
         });
