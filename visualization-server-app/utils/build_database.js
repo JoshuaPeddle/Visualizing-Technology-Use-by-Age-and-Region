@@ -17,7 +17,7 @@ var myurl = 'http://localhost:3000';
 const instance = axios.create({
     baseURL: myurl,
     timeout: 5000, //5 seconds max
-    headers: { 'content-type': 'application/json' }
+    //headers: { 'content-type': 'application/json' } //not necessary
 });
 /**
  * Gets the response collection
