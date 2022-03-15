@@ -1,0 +1,23 @@
+{
+  "name": "visualization-server-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server-app.js",
+
+  "dependencies": {
+    "axios": "^0.21.4",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3"
+    
+  },
+
+  "devDependencies": {
+    "mocha": "^9.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "Ethan Thomas Mc Donald  &  Joshua Peddle ",
+  "license": "ISC"
+}
