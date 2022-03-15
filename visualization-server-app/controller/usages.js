@@ -16,3 +16,18 @@ module.exports.getUsages = async (req, res) => {
         res.send("no usages")
     }
 }
+
+async function validateSearchTerms(searchTerms)  {
+searchTerms = searchTerms.toArray()
+console.log("Array of searchTerms: ")
+console.log(searchTerms)
+validGeo = ['Canada', 'Atlantic provinces','Quebec', 'Ontario', 'Prairie provinces', 'British Columbia']  //all the sets to input, will do later.
+validAgeGroup = ['Total, Internet users aged 15 years and over', 'Internet users aged 15 to 24 years', 'Internet users aged 25 to 44 years', 'Internet users aged 45 to 64 years', 'Internet users aged 65 years and over']     
+validServiceType = ['Have access to the Internet at home', 'Use of a smart home devices in primary residence ', 'Have a smartphone for personal use','Have social networking accounts','Used or purchased video streaming services', 'Used or purchased music streaming services', 'Used government services online ', 'Shopped online'] //smart home devices really does have a trailing whitespace. 
+validIncome = ['Total, household income quartiles', 'Lowest quartile household income', 'Second quartile household income', 'Third quartile household income','Highest quartile household income']
+validUom = ['Percent']
+//validValue = 
+
+//(validator.isFloat(searchTerms.query['value']) || validator.isInteger(searchTerms.query['value']))
+//use validator.isIn(searchTerm, validArray) to check the rest.
+}

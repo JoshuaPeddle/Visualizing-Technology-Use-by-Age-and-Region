@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "server-app.js",
-
   "dependencies": {
     "axios": "^0.21.4",
     "express": "^4.17.1",
-    "mongodb": "^3.6.3"
-    
+    "mongodb": "^3.6.3",
+    "validator": "^13.7.0"
   },
-
   "devDependencies": {
     "mocha": "^9.2.0"
   },
