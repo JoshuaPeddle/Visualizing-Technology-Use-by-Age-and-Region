@@ -33,12 +33,19 @@ class Response {
         }
     }
 
+
+    /**
+     * This static method for the class Response will retrieve
+     * all the responses returned by querying the searchTerms
+     * @returns {Array[Response]} - An array with all responses retrieved
+     */
     static async getResponses(searchTerms){
 
-    let collection = await _get_response_collection()
+        let collection = await _get_response_collection()
 
-    let matching_responses = await collection.find({searchTerms}).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
-    return matching_responses;
+        let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+        console.log("found", matching_responses.length)
+        return matching_responses;
     }
 }
 module.exports.Response = Response

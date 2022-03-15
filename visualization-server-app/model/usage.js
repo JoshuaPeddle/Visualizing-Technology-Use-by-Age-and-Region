@@ -1,11 +1,11 @@
 const e = require('express');
-const client = require('../utils/db');
+const mongo = require('../utils/db');
 
 /**
  * Gets the usage collection
  * @returns The usage collection from MongoDB
  */
- async function _get_usage_collection() {
+async function _get_usage_collection() {
     let db = await mongo.getDb();
     return await db.collection('usage');
 };
@@ -21,12 +21,21 @@ class Usage {
         //for this model, everything is a percentage - this unit is included for consistency.
         this.value = value 
     }
+
+
+
+    /**
+     * This static method for the class Usage will retrieve
+     * all the usages returned by querying the searchTerms
+     * @returns {Array[Usage]} - An array with all usage retrieved
+     */
     static async getUsages(searchTerms){
 
-    let collection = await _get_usage_collection()
+        let collection = await _get_usage_collection()
 
-    let matching_responses = await collection.find({searchTerms}).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
-    return matching_responses;
+        let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+        console.log("found", matching_responses.length)
+        return matching_responses;
     }
 }
 module.exports.Usage = Usage
