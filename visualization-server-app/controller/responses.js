@@ -40,4 +40,19 @@ validUnit = ['Persons', 'Percent']
 
 //(validator.isFloat(searchTerms.query['value']) || validator.isInteger(searchTerms.query['value']))
 //use validator.isIn(searchTerm, validArray) to check the rest.
+let v1 = (validator.isFloat(searchTerms['value']) || validator.isInteger(searchTerms['value']))
+let v2 = validator.isIn(searchTerms['geo'], validGeo)
+let v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
+let v4 = validator.isIn(searchTerms['sex'], validSex)
+let v5 = validator.isIn(searchTerms['question'], validQuestion)
+let v6 = validator.isIn(searchTerms['unit'], validUnit)
+let v7 = validator.isIn(searchTerms['response'], validResponse)
+let v8 = validator.isIn(searchTerms['estimate'], validEstimate)
+//Check all 8 conditions to verify the search is valid.
+if(v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8) { //I'm assuming this functions like java but haven't actually verified it does.
+    return true
+}
+else{
+    return false
+}
 }

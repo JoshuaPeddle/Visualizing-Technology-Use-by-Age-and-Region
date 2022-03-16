@@ -28,6 +28,17 @@ validIncome = ['Total, household income quartiles', 'Lowest quartile household i
 validUnit = ['Percent']
 //validValue = 
 
-//(validator.isFloat(searchTerms.query['value']) || validator.isInteger(searchTerms.query['value']))
-//use validator.isIn(searchTerm, validArray) to check the rest.
+let v1 = (validator.isFloat(searchTerms['value']) || validator.isInteger(searchTerms['value']))
+let v2 = validator.isIn(searchTerms['geo'], validGeo)
+let v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
+let v4 = validator.isIn(searchTerms['serviceType'], validServiceType)
+let v5 = validator.isIn(searchTerms['income'], validIncome)
+let v6 = validator.isIn(searchTerms['unit'], validUnit)
+//Check all six conditions to verify the search is valid.
+if(v1 && v2 && v3 && v4 && v5 && v6) { //I'm assuming this functions like java but haven't actually verified it does.
+    return true
+}
+else{
+    return false
+}
 }
