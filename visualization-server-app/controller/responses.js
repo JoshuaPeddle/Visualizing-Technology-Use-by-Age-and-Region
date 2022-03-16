@@ -26,7 +26,7 @@ module.exports.getResponses = async (req,res) =>{
 }
 
 async function validateSearchTerms(searchTerms)  {
-searchTerms = searchTerms.toArray()
+searchTerms = searchTerms
 console.log("Array of searchTerms: ")
 console.log(searchTerms)
 validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia'] //all the sets to input, will do later.
