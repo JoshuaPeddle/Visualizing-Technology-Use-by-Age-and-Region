@@ -78,7 +78,25 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 // This could be validated better
                 assert.strictEqual(res.data, 'no responses'); 
             });
-            
+            it('Comprehensive Filter Test - all filters return correctly.', async function () {
+                // construct a sample search with invalid search params
+                let sampleSearch = {
+                    geo:'Nova Scotia', 
+                    ageGroup:'Total, 15 years and over', 
+                    sex: 'Female',
+                    question: 'Helps to be more creative',
+                    response: 'Rarely',
+                    estimate: 'Number of persons',
+                    unit:'Persons', 
+                    value:49 //Not a string
+                    
+                }
+                let res = await instance.get('/responses', { params: sampleSearch });
+                // This could be validated better //Could it?
+                console.log("Comprehensive Search: ")
+                console.log(res.data)
+                assert.strictEqual(res.data.length, 1); 
+            });
         });
 
 
@@ -112,8 +130,8 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     serviceType:'Have access to the Internet at home', //This one is correct
                     ageGroup:'Total, Internet users aged 15 years and over', // this line works now
                     income:'Total, household income quartiles', //this line works now
-                    //unit:'Percent', //this line causes failure
-                    //value:93.6 //this line newly fails
+                    unit:'Percent', //this line works now
+                    value:93.6 //this line also works now!
 
                     
                 }
