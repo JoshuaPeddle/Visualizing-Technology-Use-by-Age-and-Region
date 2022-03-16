@@ -88,13 +88,13 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     response: 'Rarely',
                     estimate: 'Number of persons',
                     unit:'Persons', 
-                    value:49 //Not a string
+                    value:49000 //Not a string
                     
                 }
                 let res = await instance.get('/responses', { params: sampleSearch });
                 // This could be validated better //Could it?
-                console.log("Comprehensive Search: ")
-                console.log(res.data)
+                //console.log("Comprehensive Search: ")
+                //console.log(res.data)
                 assert.strictEqual(res.data.length, 1); 
             });
         });
@@ -137,8 +137,8 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 }
                 let res = await instance.get('/usages', { params: sampleSearch });
                 // This could be validated better //Could it?
-                console.log("Comprehensive Search: ")
-                console.log(res.data)
+                //console.log("Comprehensive Search: ")
+                //console.log(res.data)
                 assert.strictEqual(res.data.length, 1); 
             });
         });
