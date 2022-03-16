@@ -1,5 +1,6 @@
 const e = require('express');
 const mongo = require('../utils/db');
+const fs = require('fs');
 
 /**
  * Gets the usage collection
@@ -38,5 +39,41 @@ class Usage {
         console.log("found", matching_responses.length)
         return matching_responses;
     }
+
+
+    /**
+       * This  method for the class Usage receives an array of type Usage
+       * and generates a tsv representation of the objects. It returns the filename of the generated file.
+       * @param {Usage[]} usages Array of Usage objects to be saved to tsv
+       * @returns {String} filename - local file reference to generated tsv file
+       */
+    static async toTSV(usages) {
+        const filename = "/usage_export.tsv"
+        const header = "Geo\tService Type\tAge Group\tHousehold Income Quartile\tuom\tValue\n"
+        // Write the header
+        await fs.promises.writeFile('model' + filename, header, { flag: 'w' })
+
+        let to_write = ""
+        usages.forEach((el) => {
+            // el is in string dict notation, use Object.values to get the Usage objects
+            let objs = Object.values(el)
+            // We have to slice off 1 here since were passing a mongoDB object (_id: xyz)
+            // This will have to be changed if we fix getUsages to return Usage objects instead of mongo Objects
+            objs.slice(1).forEach(sub_el => {
+                to_write = to_write.concat(sub_el, '\t')
+            })
+            to_write = to_write.concat('\n')
+
+
+        })
+        await fs.promises.appendFile('model' + filename, to_write)
+
+        return __dirname + filename;
+
+    }
+
+
+
+
 }
 module.exports.Usage = Usage
