@@ -1,6 +1,7 @@
 //Skeleton from contacts-app-v4
 var assert = require('assert');
 const { response } = require('../model/response');
+const { usage } = require('../model/usage');
 //const validation = require('../utils/validate-fields')
 const axios = require('axios');
 var myurl = 'http://localhost:3000';           
@@ -141,6 +142,37 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 //console.log(res.data)
                 assert.strictEqual(res.data.length, 1); 
             });
+
+
+            it('Test toTSV', async function () {
+                // construct a valid sample search
+                let sampleSearch = {
+                    geo:'Canada', 
+                    serviceType:'Have access to the Internet at home', 
+                    ageGroup:'Total, Internet users aged 15 years and over', 
+                }
+                let res1 = await instance.get('/usages', { params: sampleSearch });
+                assert.strictEqual(res1.data.length, 5); //5 results are returned,
+                
+
+                // Send the data from req1 off to create a tsv
+                let res2 = await instance.post('/usages/tsv',{
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify(res1.data)
+                });
+                console.log(res2.data)//  to see a text representation of tsv. res.download works in browsers, not mocha
+                // Checking the status will at least let us know the server thinks everything was correct
+                assert.strictEqual(res2.status, 200);
+                // Check the start of the response
+                assert.strictEqual(res2.data.slice(0,11),'Geo\tService' )
+                // Check the end of the response
+                assert.strictEqual(res2.data.slice(-10),'ent\t99.6\t\n' )
+                // All seems to be good
+                
+            });
+
+
+
         });
     });
 });            

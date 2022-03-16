@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 //we may not need these, but left for the moment.
-//app.use(express.json()); //We don't need this. 
+app.use(express.json()); //We now need this for passing Response and Usage objects back to server for export
 app.use(express.urlencoded({extended: true}));//incoming objects are strings or arrays
 
 //Import operations here to a const
@@ -20,6 +20,7 @@ async function createServer(){
     //resource paths
     app.get('/responses', responseController.getResponses); //more specific paths may be required? I'm not positive, since we're pulling all matching only..
     app.get('/usages', usageController.getUsages);
+    app.post('/usages/tsv', usageController.exportTSV);  // POST has no size restrictions, GET is restricted to 2048 characters.
     // start the server
     server = app.listen(port, () => {
       console.log('listening at http://localhost:%d', port);

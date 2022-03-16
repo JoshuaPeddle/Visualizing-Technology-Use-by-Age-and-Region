@@ -2,6 +2,10 @@ const Usage = require('../model/usage').Usage;
 const fs = require('fs');
 
 
+// This constant allows a chose of keeping generated tsv files
+// or removing them after sending to client
+const keep_tsv = false
+
 module.exports.getUsages = async (req, res) => {
     //need to get search dict from req
     console.log(req.query)
@@ -41,4 +45,26 @@ if(v1 && v2 && v3 && v4 && v5 && v6) { //I'm assuming this functions like java b
 else{
     return false
 }
+}
+
+
+/**
+     * This function accepts an array of posted Usage objects, generates a tsv locally and returns a prompt to download the file to the client.
+     */
+module.exports.exportTSV = async (req, res) => {
+    // Usage objects were sent as as stringified JSON
+    // Parse data from stringified JSON
+    let usages = JSON.parse(req.body.body)
+    // Call static function of Usage to create the tsv file
+    let tsv_file = await Usage.toTSV(usages);
+    // Use express download function to send tsv file to client
+    res.download(tsv_file, async (err) => {
+        if (err == undefined && !keep_tsv) { // If no err, and we dont want to keep the tsv, remove it after sending it
+            //fs.rmSync(tsv_file)
+            fs.rm(tsv_file,(err)=>{
+                if (err) throw err;
+                console.log('tsv file created and sent to client')
+            })
+        }
+    })
 }
