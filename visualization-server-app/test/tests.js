@@ -15,7 +15,8 @@ const instance = axios.create({
 To run these tests first ensure mocha is installed, then go to application root and run 'mocha'
 API testing requires the server-app.js be running while testing
 */
-
+//Note that these tests are extremely brittle to database changes. Our data is not designed to be updated or deleted, so this is a non-issue.
+//We do  
 
 describe('Visualizing-Technology - Tests with Mocha', function () {
 
@@ -27,7 +28,6 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
             // Test 1
             it('Responses DB correct size', async function () {
                 let res = await instance.get('/responses', { params: {} });
-                // This could be validated better
                 console.log("response DB actual size: "+res.data.length)
                 assert.strictEqual(res.data.length, 62400)
             });
@@ -37,7 +37,6 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
             // Test 1
             it('Usage DB correct size', async function () {
                 let res = await instance.get('/usages', { params: {} });
-                // This could be validated better
                 console.log("response DB actual size: "+res.data.length)
                 assert.strictEqual(res.data.length, 1200)
             });
@@ -62,9 +61,8 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 }
                 // We're doing a get request, so send our data as params
                 let res = await instance.get('/responses', { params: sampleSearch });
-                // This could be validated better
-                console.log(res.data)
-                assert.strictEqual(res.status, 200); 
+                //console.log(res.data) //debugging line, uncomment this if for some reason the length doesn't match expected. 
+                assert.strictEqual(res.data.length, 40); 
             });
 
             
@@ -106,6 +104,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 // This could be validated better //Could it?
                 assert.strictEqual(res.data, 'no usages'); 
             });
+          
             it('Comprehensive Filter Test - all filters return correctly.', async function () {
                 // construct a sample search with invalid search params
                 let sampleSearch = {
@@ -115,6 +114,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     income:'Total, household income quartiles', //this line works now
                     //uom:'Percent', //this line causes failure
                     //value:93.6 //this line newly fails
+
                     
                 }
                 let res = await instance.get('/usages', { params: sampleSearch });
