@@ -88,7 +88,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     response: 'Rarely',
                     estimate: 'Number of persons',
                     unit:'Persons', 
-                    value:49 //Not a string
+                    value:49000 //Not a string
                     
                 }
                 let res = await instance.get('/responses', { params: sampleSearch });
