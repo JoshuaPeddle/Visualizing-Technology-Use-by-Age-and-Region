@@ -32,7 +32,7 @@ class Usage {
     static async getUsages(searchTerms){
 
         let collection = await _get_usage_collection()
-
+        searchTerms['value'] == undefined ? 0: searchTerms['value'] = parseFloat(searchTerms['value'])
         let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
         console.log("found", matching_responses.length)
         return matching_responses;
