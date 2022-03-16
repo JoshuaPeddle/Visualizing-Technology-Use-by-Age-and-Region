@@ -113,7 +113,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     serviceType:'Have access to the Internet at home', //This one is correct
                     ageGroup:'Total, Internet users aged 15 years and over', // this line works now
                     income:'Total, household income quartiles', //this line works now
-                    //uom:'Percent', //this line causes failure
+                    //unit:'Percent', //this line causes failure
                     //value:93.6 //this line newly fails
                     
                 }

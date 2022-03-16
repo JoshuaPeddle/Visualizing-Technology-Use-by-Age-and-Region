@@ -35,7 +35,7 @@ validSex = ['Male', 'Female', 'Both sexes']
 validQuestion = ['Helps make more informed decisions', 'Helps to be more creative', 'Helps to communicate', 'Interferes with other things in life', 'Saves time' ]
 validResponse = ['Always or often', 'Always', 'Often', 'Sometimes', 'Rarely or never', 'Rarely', 'Never', "Don't know/refusal/not stated"]
 validEstimate = ['Number of persons', 'Percentage of persons', 'Low 95% confidence interval, percent', 'High 95% confidence interval, percent']
-validUom = ['Persons', 'Percent']
+validUnit = ['Persons', 'Percent']
 //validValue = 
 
 //(validator.isFloat(searchTerms.query['value']) || validator.isInteger(searchTerms.query['value']))
