@@ -66,7 +66,10 @@ async function buildDB() {
     else {responseData.split('\n').slice(start = 1).forEach(async (el) => {
         let rawData = el.split("\t");
         // Construct response from split data
-        let newResponse = new Response(rawData[1], rawData[3], rawData[4], rawData[5], rawData[6], rawData[7], rawData[8], rawData[14])
+        // Some of the data is being added to mongo with extra quotes. like ""Low 95% confidence interval, percent""  or ""Total, 15 years and over""
+        // This aims to remove them as they make querying the database annoying
+        rawData = rawData.map((it) => it.replace(/"/g, ''))
+        let newResponse = new Response(rawData[1], rawData[3], rawData[4], rawData[5], rawData[6], rawData[7], rawData[8], parseFloat(rawData[14]))
         // Add to array
         responseArray.push(newResponse)
        
@@ -88,8 +91,11 @@ async function buildDB() {
     }
     else{usageData.split('\n').slice(start = 1).forEach(async (el) => {
         let rawData = el.split("\t");
-        //console.log(rawData)
-        let newUsage = new Usage(rawData[1], rawData[3], rawData[4], rawData[5], rawData[6], rawData[12])
+        // Construct response from split data
+        // Some of the data is being added to mongo with extra quotes. like ""Low 95% confidence interval, percent""  or ""Total, 15 years and over""
+        // This aims to remove them as they make querying the database annoying
+        rawData = rawData.map((it) => it.replace(/"/g, ''))
+        let newUsage = new Usage(rawData[1], rawData[3], rawData[4], rawData[5], rawData[6],  parseFloat(rawData[12]))
         // Add to array
         usageArray.push(newUsage)
     })
