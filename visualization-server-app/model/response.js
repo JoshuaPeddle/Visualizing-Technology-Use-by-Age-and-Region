@@ -1,5 +1,6 @@
 const e = require('express');
 const mongo = require('../utils/db');
+const fs = require('fs');
 
 /**
  * Gets the response collection
@@ -47,5 +48,45 @@ class Response {
         console.log("found", matching_responses.length)
         return matching_responses;
     }
+
+
+    /**
+           * This  method for the class Response receives an array of type Response
+           * and generates a tsv representation of the objects. It returns the filename of the generated file.
+           * @param {Response[]} responses Array of Response objects to be saved to tsv
+           * @returns {String} filename - local file reference to generated tsv file
+           */
+    static async toTSV(responses) {
+        const filename = "/response_export.tsv"
+        const header = "Geo\tAge Group\tSex\tQuestion\tResponse\tEstimate\tuom\tValue"
+        // Write the header
+        await fs.promises.writeFile('model' + filename, header, { flag: 'w' })
+
+        let to_write = ""
+        responses.forEach((el) => {
+            // el is in string dict notation, use Object.values to get the Response objects
+            let objs = Object.values(el)
+            // We have to slice off 1 here since were passing a mongoDB object (_id: xyz)
+            // This will have to be changed if we fix getResponses to return Response objects instead of mongo Objects
+            objs.slice(1).forEach(sub_el => {
+                to_write = to_write.concat(sub_el, '\t')
+            })
+            to_write = to_write.concat('\n')
+
+
+        })
+        await fs.promises.appendFile('model' + filename, to_write)
+
+        return __dirname + filename;
+
+    }
+
+
+
+
+
+
+
+    
 }
 module.exports.Response = Response

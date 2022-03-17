@@ -21,6 +21,7 @@ async function createServer(){
     app.get('/responses', responseController.getResponses); //more specific paths may be required? I'm not positive, since we're pulling all matching only..
     app.get('/usages', usageController.getUsages);
     app.post('/usages/tsv', usageController.exportTSV);  // POST has no size restrictions, GET is restricted to 2048 characters.
+    app.post('/responses/tsv', responseController.exportTSV); 
     // start the server
     server = app.listen(port, () => {
       console.log('listening at http://localhost:%d', port);
