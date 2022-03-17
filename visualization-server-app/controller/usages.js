@@ -42,7 +42,7 @@ module.exports.getUsages = async (req, res) => {
      // Validator is not liking undefined values. Say if the search only contains 'geo', 'ageGroup', etc. is undefined
      // Using ternary operator to keep the number of lines manageable but not set on it.
      // If searchTerms['x'] is undefined, then don't validate & return true. Else, validate searchTerms['x'].
-     let v1 = searchTerms['value'] == undefined ? true : validator.isFloat(searchTerms['value']) || validator.isInteger(searchTerms['value'])
+     let v1 = searchTerms['value'] == undefined ? true : validator.isFloat(searchTerms['value']) || validator.isInt(searchTerms['value'])
      let v2 = searchTerms['geo'] == undefined ? true : validator.isIn(searchTerms['geo'], validGeo)
      let v3 = searchTerms['ageGroup'] == undefined ? true : validator.isIn(searchTerms['ageGroup'], validAgeGroup)
      let v4 = searchTerms['serviceType'] == undefined ? true : validator.isIn(searchTerms['serviceType'], validServiceType)//
