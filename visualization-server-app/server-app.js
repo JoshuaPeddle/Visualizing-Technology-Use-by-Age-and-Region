@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-//we may not need these, but left for the moment.
 app.use(express.json()); //We now need this for passing Response and Usage objects back to server for export
 app.use(express.urlencoded({extended: true}));//incoming objects are strings or arrays
 
