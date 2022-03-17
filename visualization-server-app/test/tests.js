@@ -77,7 +77,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 let res = await instance.get('/responses', { params: sampleSearch });
                 // Should get a message back from the server 'no responses'
                 // This could be validated better
-                assert.strictEqual(res.data, 'no responses'); 
+                assert.strictEqual(res.data, 'invalid query'); // Added error message to differentiate between empty query: 'no responses' and an invalid query: 'invalid query'
             });
             it('Comprehensive Filter Test - all filters return correctly.', async function () {
                 // construct a sample search with invalid search params
@@ -153,7 +153,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 }
                 let res = await instance.get('/usages', { params: sampleSearch });
                 // This could be validated better //Could it?
-                assert.strictEqual(res.data, 'no usages'); 
+                assert.strictEqual(res.data, 'invalid query');   // Added error message to differentiate between empty query: 'no usages' and an invalid query: 'invalid query'
             });
           
             it('Comprehensive Filter Test - all filters return correctly.', async function () {
