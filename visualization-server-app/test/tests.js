@@ -98,6 +98,38 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                 //console.log(res.data)
                 assert.strictEqual(res.data.length, 1); 
             });
+
+
+
+            it('Responses toTSV success', async function () {
+                // construct a valid sample search
+                let sampleSearch = {
+                    geo: 'Ontario',
+                    sex: 'Male',
+                    question:"Helps to communicate",
+                    response:"Always or often",
+                    estimate: 'Number of persons',
+                    unit:'Persons'
+                }
+                let res1 = await instance.get('/responses', { params: sampleSearch });
+                assert.strictEqual(res1.data.length, 10); //10 results are returned,
+                
+
+                // Send the data from req1 off to create a tsv
+                let res2 = await instance.post('/responses/tsv',{
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify(res1.data)
+                });
+                //console.log(res2.data)//  to see a text representation of tsv. res.download works in browsers, not mocha
+                // Checking the status will at least let us know the server thinks everything was correct
+                assert.strictEqual(res2.status, 200);
+                // Check the start of the response
+                assert.strictEqual(res2.data.slice(0,11),'Geo\tAge Gro' )
+                // Check the end of the response
+                assert.strictEqual(res2.data.slice(-10),'s\t148000\t\n' )
+                // All seems to be good
+                
+            });
         });
 
 
@@ -144,7 +176,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
             });
 
 
-            it('Test toTSV', async function () {
+            it('Usages toTSV success', async function () {
                 // construct a valid sample search
                 let sampleSearch = {
                     geo:'Canada', 
@@ -160,7 +192,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     headers: {'content-type': 'application/json'},
                     body: JSON.stringify(res1.data)
                 });
-                console.log(res2.data)//  to see a text representation of tsv. res.download works in browsers, not mocha
+                //console.log(res2.data)//  to see a text representation of tsv. res.download works in browsers, not mocha
                 // Checking the status will at least let us know the server thinks everything was correct
                 assert.strictEqual(res2.status, 200);
                 // Check the start of the response

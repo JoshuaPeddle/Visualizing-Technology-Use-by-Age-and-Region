@@ -6,3 +6,4 @@ node_modules
 package-lock.json
 visualization-server-app/package-lock.json
 visualization-server-app/model/usage_export.tsv
+visualization-server-app/model/response_export.tsv

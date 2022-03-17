@@ -60,7 +60,6 @@ module.exports.exportTSV = async (req, res) => {
     // Use express download function to send tsv file to client
     res.download(tsv_file, async (err) => {
         if (err == undefined && !keep_tsv) { // If no err, and we dont want to keep the tsv, remove it after sending it
-            //fs.rmSync(tsv_file)
             fs.rm(tsv_file,(err)=>{
                 if (err) throw err;
                 console.log('tsv file created and sent to client')

@@ -2,6 +2,10 @@ const Response = require('../model/response').Response;
 const fs = require('fs');
 let validator = require('validator');
 
+// This constant allows a chose of keeping generated tsv files
+// or removing them after sending to client
+const keep_tsv = true
+
 
 /**
  * 
@@ -55,4 +59,25 @@ if(v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8) { //I'm assuming this functions
 else{
     return false
 }
+}
+
+
+/**
+     * This function accepts an array of posted Response objects, generates a tsv locally and returns a prompt to download the file to the client.
+     */
+ module.exports.exportTSV = async (req, res) => {
+    // Response objects were sent as as stringified JSON
+    // Parse data from stringified JSON
+    let responses = JSON.parse(req.body.body)
+    // Call static function of Response to create the tsv file
+    let tsv_file = await Response.toTSV(responses);
+    // Use express download function to send tsv file to client
+    res.download(tsv_file, async (err) => {
+        if (err == undefined && !keep_tsv) { // If no err, and we dont want to keep the tsv, remove it after sending it
+            fs.rm(tsv_file,(err)=>{
+                if (err) throw err;
+                console.log('tsv file created and sent to client')
+            })
+        }
+    })
 }
