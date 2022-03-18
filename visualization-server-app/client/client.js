@@ -20,5 +20,5 @@ var myurl = `http://0.0.0.0:${Port}`; //localhost broke things so changed to 0.0
  * Where the two arguments are integers between 1-5
  */
 async function main(){
-    //make a placeholder request to the server
+    //You should not be running this in iteration 2. tests.js will cover everything you need.
 }

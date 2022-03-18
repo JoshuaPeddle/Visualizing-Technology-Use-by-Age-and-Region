@@ -5,12 +5,12 @@ let validator = require('validator');
 
 // This constant allows a chose of keeping generated tsv files
 // or removing them after sending to client
-const keep_tsv = false
+const keep_tsv = true //set to true for submission
 
 module.exports.getUsages = async (req, res) => {
     //need to get search dict from req
-    console.log("Req.query Usages below")
-    console.log(req.query)
+    //console.log("Req.query Usages below")
+    //console.log(req.query)
     let is_valid = validateSearchTerms(req.query)
     if (!is_valid) {
          // If validator says no, return 'invalid query'
@@ -32,7 +32,7 @@ module.exports.getUsages = async (req, res) => {
 
  function validateSearchTerms(searchTerms)  {
 
-     console.log("validateSearchTerms array of searchTerms: ")
+     //console.log("validateSearchTerms array of searchTerms: ")
      //console.log(searchTerms)
      validGeo = ['Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia']  //all the sets to input, will do later.
      validAgeGroup = ['Total, Internet users aged 15 years and over', 'Internet users aged 15 to 24 years', 'Internet users aged 25 to 44 years', 'Internet users aged 45 to 64 years', 'Internet users aged 65 years and over']
