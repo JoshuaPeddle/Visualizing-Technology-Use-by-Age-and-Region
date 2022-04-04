@@ -92,6 +92,39 @@ $(function () {
         });
         console.log("Usages:", usages)
     }
-
+    function requestExportUsages() {
+        //Note: Do not call directly. Should only be called via the requestExport button.
+        $.ajax({
+            url: '/usages/tsv',
+            type: 'POST',
+            data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
+            contentType: 'application/json',
+            success: function (response) {
+                //Does anything go here? Just making the post should complete it.
+            },
+            //We can use the alert box to show if there's an error in the server-side
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                alert('Error - ' + errorMessage);
+            }
+        });
+    }
+    function requestExportResponses() {
+        //Note: Do not call directly. Should only be called via the requestExport button.
+        $.ajax({
+            url: '/responses/tsv',
+            type: 'POST',
+            data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
+            contentType: 'application/json',
+            success: function (response) {
+                //Does anything go here? Just making the post should complete it.
+            },
+            //We can use the alert box to show if there's an error in the server-side
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                alert('Error - ' + errorMessage);
+            }
+        });
+    }
 
 });
