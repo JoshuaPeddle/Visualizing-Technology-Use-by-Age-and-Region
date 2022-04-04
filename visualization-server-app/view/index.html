@@ -38,7 +38,72 @@
                 <input id="usage_selector" type="checkbox" title="usageSelector" class="dataset_selector" /> Usages
             </p>
         </div>
+        <div id="shared_filters">
+            <p>Select sex
+                <br />
+                <input id="shared_female_filter" type="checkbox" title="sexFilter" class="shared_filters">Female</input>
+                <input id="shared_male_filter" type="checkbox" title="sexFilter" class="shared_filters">Male</input>
+                <input id="shared_both_sexes_filter" type="checkbox" title="sexFilter" class="shared_filters">Both</input>
+            </p>
+            <p>Select ages
+                <br />
+                <input id="shared_15+_filter" type="checkbox" title="ageFilter" class="shared_filters">15+</input>
+                <input id="shared_15-24_filter" type="checkbox" title="ageFilter" class="shared_filters">15-24</input>
+                <input id="shared_25-54_filter" type="checkbox" title="ageFilter" class="shared_filters">25-54</input>
+                <input id="shared_55-64_filter" type="checkbox" title="ageFilter" class="shared_filters">55-64</input>
+                <input id="shared_65+_filter" type="checkbox" title="ageFilter" class="shared_filters">65+</input>
+            </p>
+            <p>Select Location/Regions <!--TODO: Disable all except 'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia' if the Usages dataset is on!-->
+                <br />
+                <input id="shared_canada_filter" type="checkbox" title="locationFilter" class="shared_filters">Canada</input>
+                <input id="shared_atlantic_filter" type="checkbox" title="locationFilter" class="shared_filters">Atlantic Provinces</input>
+                <input id="shared_newfoundland_filter" type="checkbox" title="locationFilter" class="shared_filters">Newfoundland and Labrador</input>
+                <input id="shared_pei_filter" type="checkbox" title="locationFilter" class="shared_filters">Prince Edward Island</input>
+                <input id="shared_novascotia_filter" type="checkbox" title="locationFilter" class="shared_filters">Nova Scotia</input>
+                <input id="shared_newbrunswick_filter" type="checkbox" title="locationFilter" class="shared_filters">New Brunswick</input>
+                <input id="shared_quebec_filter" type="checkbox" title="locationFilter" class="shared_filters">Quebec</input>
+                <input id="shared_ontario_filter" type="checkbox" title="locationFilter" class="shared_filters">Ontario</input>
+                <input id="shared_prairieprovinces_filter" type="checkbox" title="locationFilter" class="shared_filters">Prairie Provinces</input>
+                <input id="shared_manitoba_filter" type="checkbox" title="locationFilter" class="shared_filters">Manitoba</input>
+                <input id="shared_saskatchewan_filter" type="checkbox" title="locationFilter" class="shared_filters">Saskatchewan</input>
+                <input id="shared_alberta_filter" type="checkbox" title="locationFilter" class="shared_filters">Alberta</input>
+                <input id="shared_britishcolumbia_filter" type="checkbox" title="locationFilter" class="shared_filters">British Columbia</input>
+            </p>
+        </div>
+        <div id="response_specific_filters">
+            <p>Select filters for questions.
+                <br />
+                <input id="response_helps_communicate_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Helps to Communicate</input>
+                <input id="response_saves_time_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Saves Time</input>
+                <input id="response_interferes_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Interferes with other things in life</input>
+                <input id="response_helps_creative_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Helps to be more creative</input>
+                <input id="response_helps_decisions_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Helps to make informed decisions</input>
 
+            </p>
+            <p>Select filters for answers.
+                <br />
+                <input id="response_always/often_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Always/Often</input>
+                <input id="response_always_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Always</input>
+                <input id="response_often_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Often</input>
+                <input id="response_sometimes_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Sometimes</input>
+                <input id="response_rarely/never_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Rarely/Never</input>
+                <input id="response_rarely_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Rarely</input>
+                <input id="response_never_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Never</input>
+                <input id="response_don't know_filter" type="checkbox" title="responseSubfilter" class="response_specific_filters">Don't know</input>
+            </p>
+        </div>
+        <div id="usage_specific_filters">
+            <p>Select filters for data statistics.
+                <br />
+                <input id="service_internet_at_home_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Have access to the Internet at home</input>
+                <input id="service_smarthome_at_home_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Use of smart home devices in primary residence</input>
+                <input id="service_smartphone_personal_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Have a smartphone for personal use</input>
+                <input id="service_social_networking_acccounts_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Have social networking accounts</input>
+                <input id="service_video_streaming_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Used or purchased video streaming services</input>
+                <input id="service_government_services_online_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Used government services online </input>
+                <input id="service_shopped_online_filter" type="checkbox" title="serviceType" class="usage_specific_filters">Shopped online</input>
+            </p>
+        </div>
     </div>
 
 </body>
