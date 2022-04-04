@@ -12,6 +12,9 @@ const responseController = require('./controller/responses'); //I... think you c
 const usageController = require('./controller/usages');// but I don't think the course was explicit anywhere.
 var server;
 
+// Add front end view 
+app.use(express.static(__dirname + '/view'))
+
 async function createServer(){
   try {
     //make sure database is working before starting
