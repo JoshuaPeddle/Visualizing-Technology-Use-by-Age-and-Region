@@ -16,6 +16,9 @@ $(function () {
     $(".dataset_selector").change(function (e) {
         e.preventDefault();
         alert(JSON.stringify([this.title, this.checked]))  // Alert to changes in dataset selectors
+        if(this.title == "responseSelector" && this.checked == true) { //for testing
+            getResponses()
+        }
     });
 
     /**
@@ -30,6 +33,7 @@ $(function () {
             question: 'Helps to be more creative',
             response: 'Rarely',
         }
+        console.log("Data for getResponses:", data)
         let responses = [] // Array to store return values
         $.ajax({
             url: '/responses',
@@ -38,9 +42,11 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 response.forEach(el => {
-                    alert(JSON.stringify(el))
+                    console.log(JSON.stringify(el))
+                    responses.push(response)
                 })
-                return responses
+                console.log("Responses returning, contents:", console.log(responses))
+                return responses //This doesn't appear to work.
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
