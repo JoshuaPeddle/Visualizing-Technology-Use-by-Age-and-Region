@@ -23,7 +23,13 @@ $(function () {
             getUsages()
         }
     });
-
+    //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
+    $("#requestSearch").change(function(e){
+        let sharedFilters= $(".shared_filters")
+        //some kind of forEach code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
+        let responseFilters= $(".response_specific_filters")
+        let usageFilters= $(".usage_specific_filters")
+    });
     /**
      * Ajax function to get responses from the server to the frontend
      */
