@@ -165,8 +165,7 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
                     income:'Total, household income quartiles', //this line works now
                     unit:'Percent', //this line works now
                     value:93.6 //this line also works now!
-
-                    
+ 
                 }
                 let res = await instance.get('/usages', { params: sampleSearch });
                 // This could be validated better //Could it?

@@ -25,15 +25,31 @@ $(function () {
     });
     //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
     $("#requestSearch").change(function(e){
+        //functionality wise, to handle multiple selections, we pass arrays containing the search terms into usageSearch and responsesSearch. 
+        //Later in this, we remove any key with only empty arrays.
+        //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
+        let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],[],[],[],[],[],[],[]] //this assigns all eight variables their own individual empty arrays on a single line.
         let usagesSearch = {
+            geo:geos,
+            serviceType:serviceTypes, 
+            ageGroup:ageGroupsUsages, 
+            income:incomes, 
         }
+
         let responsesSearch = {
+            geo:geos, 
+            ageGroup:ageGroupsResponses, 
+            sex:sexes,
+            question:questions,
+            response:responses,
         }
         let sharedFilters= $(".shared_filters")
         //some kind of forEach code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
         let responseFilters= $(".response_specific_filters")
         let usageFilters= $(".usage_specific_filters")
 
+        //code should go here to remove empty dictionary entries, unless we have a more elegant solution. 
+        //I expect our validation code to throw an error if they remain, but it simplifies things considerably to have them included before this point.
         getResponses(responsesSearch)
         getUsages(usagesSearch)
     });

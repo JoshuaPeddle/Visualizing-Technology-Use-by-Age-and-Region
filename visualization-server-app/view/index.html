@@ -39,12 +39,6 @@
             </p>
         </div>
         <div id="shared_filters">
-            <p>Select sex
-                <br />
-                <input id="shared_female_filter" type="checkbox" title="sexFilter" class="shared_filters">Female</input>
-                <input id="shared_male_filter" type="checkbox" title="sexFilter" class="shared_filters">Male</input>
-                <input id="shared_both_sexes_filter" type="checkbox" title="sexFilter" class="shared_filters">Both</input>
-            </p>
             <p>Select ages
                 <br />
                 <input id="shared_15+_filter" type="checkbox" title="ageFilter" class="shared_filters">15+</input>
@@ -52,6 +46,7 @@
                 <input id="shared_25-54_filter" type="checkbox" title="ageFilter" class="shared_filters">25-54</input>
                 <input id="shared_55-64_filter" type="checkbox" title="ageFilter" class="shared_filters">55-64</input>
                 <input id="shared_65+_filter" type="checkbox" title="ageFilter" class="shared_filters">65+</input>
+                <!--TODO: Note that while the ranges are identical, the strings for Usages and Response are each different. Those values can simply both be stored in the same filter. -->
             </p>
             <p>Select Location/Regions <!--TODO: Disable all except 'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia' if the Usages dataset is on!-->
                 <br />
@@ -71,9 +66,15 @@
             </p>
         </div>
         <div id="response_specific_filters">
+            <p>Select sex.
+                <br />
+                <input id="response_female_filter" type="checkbox" title="sexFilter" class="response_specific_filters">Female</input>
+                <input id="response_male_filter" type="checkbox" title="sexFilter" class="response_specific_filters">Male</input>
+                <input id="response_both_sexes_filter" type="checkbox" title="sexFilter" class="response_specific_filters">Both</input>
+            </p>
             <p>Select filters for questions.
                 <br />
-                <input id="response_helps_communicate_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Helps to Communicate</input>
+                <input id="response_helps_communicate_filter" type="checkbox" title="questionFilter" class="response_specific_filters" search = "">Helps to Communicate</input>
                 <input id="response_saves_time_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Saves Time</input>
                 <input id="response_interferes_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Interferes with other things in life</input>
                 <input id="response_helps_creative_filter" type="checkbox" title="questionFilter" class="response_specific_filters">Helps to be more creative</input>
