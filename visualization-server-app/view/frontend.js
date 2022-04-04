@@ -25,15 +25,22 @@ $(function () {
     });
     //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
     $("#requestSearch").change(function(e){
+        let usagesSearch = {
+        }
+        let responsesSearch = {
+        }
         let sharedFilters= $(".shared_filters")
         //some kind of forEach code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
         let responseFilters= $(".response_specific_filters")
         let usageFilters= $(".usage_specific_filters")
+
+        getResponses(responsesSearch)
+        getUsages(usagesSearch)
     });
     /**
      * Ajax function to get responses from the server to the frontend
      */
-    function getResponses() {
+    function getResponses(data) {
         // Sample call to responses
         let data = {
             geo: 'Nova Scotia',
@@ -69,7 +76,7 @@ $(function () {
     /**
      * Ajax function to get usages from the server to the frontend
      */
-    function getUsages() {
+    function getUsages(data) {
         // Sample call to usages
         let data = {
             geo: 'Canada', 
