@@ -1,5 +1,6 @@
 
 var layers = {
+    "CA":null,
     "AB": null,
     "Atlantic": null,
     "BC": null,
