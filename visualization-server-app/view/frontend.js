@@ -19,6 +19,9 @@ $(function () {
         if(this.title == "responseSelector" && this.checked == true) { //for testing
             getResponses()
         }
+        else if(this.title == "usageSelector" && this.checked == true){
+            getUsages()
+        }
     });
 
     /**
@@ -43,7 +46,7 @@ $(function () {
             success: function (response) {
                 response.forEach(el => {
                     console.log(JSON.stringify(el))
-                    responses.push(response)
+                    responses.push(el)
                 })
                 console.log("Responses returning, contents:", console.log(responses))
                 return responses //This doesn't appear to work.
@@ -54,6 +57,7 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
+        console.log("Responses:", responses)
     }
 
     /**
@@ -75,7 +79,8 @@ $(function () {
             contentType: 'application/json',
             success: function (response) {
                 response.forEach(el => {
-                    alert(JSON.stringify(el))
+                    console.log(JSON.stringify(el))
+                    usages.push(el)
                 })
                 return usages
             },
@@ -85,6 +90,7 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
+        console.log("Usages:", usages)
     }
 
 
