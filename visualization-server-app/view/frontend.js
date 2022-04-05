@@ -56,9 +56,12 @@ $(function () {
                 }
                 if($(this).prop("title")=='ageFilter' && response_selected==true) {
                     toPush = handleAgeFilterValueResponse(value)
+                    // Need to check if toPush is an array before doing .forEach
                     if (Array.isArray(toPush)){
+                        // If toPush is an array, do forEach and add to ageGroupResponses 
                         toPush.forEach(element => ageGroupsResponses.push(element))//toPush may have more than one element, so this should push each of them without issue.
                     }else{
+                        // If its not an array, just add to ageGroupResponses 
                         ageGroupsResponses.push(toPush)
                     }
                 }
