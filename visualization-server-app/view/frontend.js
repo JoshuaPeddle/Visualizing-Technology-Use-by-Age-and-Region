@@ -63,7 +63,7 @@ $(function () {
             if($(this).prop("checked")==true){
                  // General location 
                 if($(this).prop("title")=='locationFilter') {
-                    toPush = value
+                    toPush = handleGeo(value)
                     // Need to check if toPush is an array before doing .forEach
                     geos.push(toPush)
                 }
@@ -151,12 +151,32 @@ $(function () {
         else if(incomingValue=='65+'){incomingValue=verification[7]}
         return incomingValue
     }
+
+    //Age brackets to join on age: 15+, 15-24, 25-44, 45-64, 65+ This is more useful for visualization than representing the full breadth of Response. Direct comparison of Usage and Response is half the vision.
+    function handleGeo(incomingValue){
+        //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
+        let verification = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
+        if(incomingValue=='CA'){incomingValue=verification[0]}
+        else if(incomingValue=='Atlantic'){incomingValue=verification[1]}
+        else if(incomingValue=='NL'){incomingValue=[verification[2],verification[4]]}
+        else if(incomingValue=='PE'){incomingValue=verification[6]}
+        else if(incomingValue=='NS'){incomingValue=verification[7]}
+        else if(incomingValue=='NB'){incomingValue=verification[7]}
+        else if(incomingValue=='QC'){incomingValue=verification[7]}
+        else if(incomingValue=='ON+'){incomingValue=verification[7]}
+        else if(incomingValue=='Prairie'){incomingValue=verification[7]}
+        else if(incomingValue=='MB'){incomingValue=verification[7]}
+        else if(incomingValue=='SK'){incomingValue=verification[7]}
+        else if(incomingValue=='AB'){incomingValue=verification[7]}
+        else if(incomingValue=='BC'){incomingValue=verification[7]}
+        return incomingValue
+    }
     /**
      * Ajax function to get responses from the server to the frontend
      */
     function getResponses(data) {
         // Sample call to responses
-        data1 = {
+        data = {
             geo: 'Nova Scotia',
             ageGroup: 'Total, 15 years and over',
             sex: 'Female',
@@ -171,6 +191,7 @@ $(function () {
             data: data,
             contentType: 'application/json',
             success: function (response) {
+                if (response = "no responses"){return response}
                 response.forEach(el => {
                     console.log(JSON.stringify(el))
                     responses.push(el)
@@ -192,7 +213,7 @@ $(function () {
      */
     function getUsages(data) {
         // Sample call to usages
-        data1 = {
+        data = {
             geo: 'Canada', 
             serviceType: 'Have access to the Internet at home', 
             ageGroup: 'Total, Internet users aged 15 years and over', 
