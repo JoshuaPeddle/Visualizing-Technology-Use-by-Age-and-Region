@@ -71,7 +71,7 @@ $(function () {
     * Function to monitor input related to the map 
     * 
     */
-    console.log($("input[title='locationFilter']").change(function (event) {
+    $("input[title='locationFilter']").change(function (event) {
 
         let new_state = map.hasLayer(layers[this.value])
         if (new_state == false) {
@@ -79,7 +79,7 @@ $(function () {
         } else {
             clearRegion(this.value)
         }
-    }))
+    })
 
     /**
     * Function to paint the map with denoted by region.
