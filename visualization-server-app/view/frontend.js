@@ -8,6 +8,7 @@ $(function () {
     $(document).ready(function () {
         // Test setting the checkbox to know frontend.js is running
         $("#response_selector").prop("checked", "true")
+        $("#shared_canada_filter").prop("checked", "true")
     });
 
 
@@ -18,21 +19,8 @@ $(function () {
         //If there are multiple selections, do we need to slice out additional searches? Will we need multiple calls to the gets?
         //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
         //geos must also now be translated, since we use Value for geojson on them. 
-        let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],[],[],[],[],[],[],[]] //this assigns all eight variables their own individual empty arrays on a single line.
-        let usagesSearch = {
-            geo:geos,
-            serviceType:serviceTypes, 
-            ageGroup:ageGroupsUsages, 
-            income:incomes, 
-        }
+        let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],"","",[],[],"","",""] //this assigns all eight variables their own individual empty arrays on a single line.
 
-        let responsesSearch = {
-            geo:geos, 
-            ageGroup:ageGroupsResponses, 
-            sex:sexes,
-            question:questions,
-            response:responses,
-        }
         //Set flags to false right before checking them, in case this is a second+ search.
         var response_selected = false
         var usage_selected = false
@@ -49,12 +37,15 @@ $(function () {
         //some kind of each() code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
         sharedFilters.each(function(){
             let value = $(this).val()
-            if($(this).prop("checked")==true){
+            // Selectors
+            if($(this).prop("selected")==true){
                 //This is either an age filter or location filter. Check, then send to child functions to translate into a valid search string for mongoDB.
+                // Usage ages
                 if($(this).prop("title") =='ageFilter' && usage_selected==true) {
                     toPush = handleAgeFilterValueUsage(value)
                     ageGroupsUsages.push(toPush)
                 }
+                // Response ages
                 if($(this).prop("title")=='ageFilter' && response_selected==true) {
                     toPush = handleAgeFilterValueResponse(value)
                     // Need to check if toPush is an array before doing .forEach
@@ -66,13 +57,76 @@ $(function () {
                         ageGroupsResponses.push(toPush)
                     }
                 }
+    
             }
+            // Options
+            if($(this).prop("checked")==true){
+                 // General location 
+                if($(this).prop("title")=='locationFilter') {
+                    toPush = value
+                    // Need to check if toPush is an array before doing .forEach
+                    geos.push(toPush)
+                }
+        }
         });
         let responseFilters= $(".response_specific_filters")
+
+        responseFilters.each(function a(){
+            let value = $(this).val()
+            // Selectors
+            if($(this).prop("selected")==true){
+                //This is either an age filter or location filter. Check, then send to child functions to translate into a valid search string for mongoDB.
+     
+                // sex filter
+                if($(this).prop("title")=='sexFilter') {   
+                    sexes =value
+                }
+                 // question filter
+                 if($(this).prop("title")=='questionFilter') {
+                    questions = value
+                }
+                 // response filter
+                 if($(this).prop("title")=='responseSubfilter') {
+                    responses = value
+                }
+            }
+        });
+
+    
         let usageFilters= $(".usage_specific_filters")
+        usageFilters.each(function(){
+            let value = $(this).val()
+            // Selectors
+            if($(this).prop("selected")==true){
+                //This is either an age filter or location filter. Check, then send to child functions to translate into a valid search string for mongoDB.
+     
+                // sex filter
+                if($(this).prop("title")=='serviceType') {
+                    serviceTypes = value
+                         
+                }
+            }
+        });
+
+        let usagesSearch = {
+            geo:geos,
+            serviceType:serviceTypes, 
+            ageGroup:ageGroupsUsages, 
+            income:incomes, 
+        }
+
+        let responsesSearch = {
+            geo:geos, 
+            ageGroup:ageGroupsResponses, 
+            sex:sexes,
+            question:questions,
+            response:responses,
+        }
         console.log(responsesSearch)
+        console.log(usagesSearch)
         //code should go here to remove empty dictionary entries, unless we have a more elegant solution. 
         //I expect our validation code to throw an error if they remain, but it simplifies things considerably to have them included before this point.
+ 
         if (response_selected){getResponses(responsesSearch)}
         if (usage_selected){getUsages(usagesSearch)}
     });
@@ -102,14 +156,14 @@ $(function () {
      */
     function getResponses(data) {
         // Sample call to responses
-        data = {
+        data1 = {
             geo: 'Nova Scotia',
             ageGroup: 'Total, 15 years and over',
             sex: 'Female',
             question: 'Helps to be more creative',
             response: 'Rarely',
         }
-        console.log("Data for getResponses:", data)
+        //console.log("Data for getResponses:", data)
         let responses = [] // Array to store return values
         $.ajax({
             url: '/responses',
@@ -138,7 +192,7 @@ $(function () {
      */
     function getUsages(data) {
         // Sample call to usages
-        data = {
+        data1 = {
             geo: 'Canada', 
             serviceType: 'Have access to the Internet at home', 
             ageGroup: 'Total, Internet users aged 15 years and over', 
