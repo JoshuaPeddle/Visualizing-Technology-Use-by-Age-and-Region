@@ -44,8 +44,34 @@ $(function () {
             question:questions,
             response:responses,
         }
+        //Set flags to false right before checking them, in case this is a second+ search.
+        var response_selected = false
+        var usage_selected = false
+        $(".dataset_selector").each(function(){
+            if(this.title == "responseSelector" && this.checked == true){
+            response_selected = true
+            }
+            else if(this.title == "usageSelector" && this.checked == true){
+            usage_selected = true
+            }
+
+        })
         let sharedFilters= $(".shared_filters")
-        //some kind of forEach code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
+        //some kind of each() code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
+        sharedFilters.each(function(){
+            let value = $(this).val()
+            if($(this).checked==true){
+                //This is either an age filter or location filter. Check, then send to child functions to translate into a valid search string for mongoDB.
+                if($(this).title=='ageFilter' && usage_selected==true) {
+                    toPush = handleAgeFilterValueUsage(value)
+                    ageGroupsUsages.push(toPush)
+                }
+                if($(this).title=='ageFilter' && response_selected==true) {
+                    toPush = handleAgeFilterValueResponse(value)
+                    toPush.forEach(element => ageGroupsResponses.push(element))//toPush may have more than one element, so this should push each of them without issue.
+                }
+            }
+        });
         let responseFilters= $(".response_specific_filters")
         let usageFilters= $(".usage_specific_filters")
 
@@ -54,6 +80,27 @@ $(function () {
         getResponses(responsesSearch)
         getUsages(usagesSearch)
     });
+    function handleAgeFilterValueUsage(incomingValue){
+        //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
+        let verification = ['Total, Internet users aged 15 years and over', 'Internet users aged 15 to 24 years', 'Internet users aged 25 to 44 years', 'Internet users aged 45 to 64 years', 'Internet users aged 65 years and over']
+        if(incomingValue=='15+'){incomingValue=verification[0]}
+        else if(incomingValue=='15-24'){incomingValue=verification[1]}
+        else if(incomingValue=='25-44'){incomingValue=verification[2]}
+        else if(incomingValue=='45-64'){incomingValue=verification[3]}
+        else if(incomingValue=='65+'){incomingValue=verification[4]}
+        return incomingValue
+    }
+    //Age brackets to join on age: 15+, 15-24, 25-44, 45-64, 65+ This is more useful for visualization than representing the full breadth of Response. Direct comparison of Usage and Response is half the vision.
+    function handleAgeFilterValueResponse(incomingValue){
+        //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
+        let verification = ['Total, 15 years and over', '15 to 24 years','25 to 34 years', '25 to 54 years', '35 to 44 years', '45 to 54 years', '55 to 64 years', '65 years and over', '65 to 74 years', '75 years and over' ]
+        if(incomingValue=='15+'){incomingValue=verification[0]}
+        else if(incomingValue=='15-24'){incomingValue=verification[1]}
+        else if(incomingValue=='25-44'){incomingValue=verification[2,4]}
+        else if(incomingValue=='55-64'){incomingValue=verification[6]}
+        else if(incomingValue=='65+'){incomingValue=verification[7]}
+        return incomingValue
+    }
     /**
      * Ajax function to get responses from the server to the frontend
      */

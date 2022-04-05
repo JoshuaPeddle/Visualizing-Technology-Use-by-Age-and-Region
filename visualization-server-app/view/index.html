@@ -41,12 +41,12 @@
         <div id="shared_filters">
             <p>Select ages
                 <br />
-                <input id="shared_15+_filter" type="checkbox" title="ageFilter" class="shared_filters">15+</input>
-                <input id="shared_15-24_filter" type="checkbox" title="ageFilter" class="shared_filters">15-24</input>
-                <input id="shared_25-54_filter" type="checkbox" title="ageFilter" class="shared_filters">25-54</input>
-                <input id="shared_55-64_filter" type="checkbox" title="ageFilter" class="shared_filters">55-64</input>
-                <input id="shared_65+_filter" type="checkbox" title="ageFilter" class="shared_filters">65+</input>
-                <!--TODO: Note that while the ranges are identical, the strings for Usages and Response are each different. Those values need to both be stored, or need to be translated by frontend depending on which datasets are checked. -->
+                <input id="shared_15+_filter" type="checkbox" title="ageFilter" value='15+' class="shared_filters">15+</input>
+                <input id="shared_15-24_filter" type="checkbox" title="ageFilter" value='15-24' class="shared_filters">15-24</input>
+                <input id="shared_25-54_filter" type="checkbox" title="ageFilter" value='25-44' class="shared_filters">25-44</input>
+                <input id="shared_55-64_filter" type="checkbox" title="ageFilter" value='45-64' class="shared_filters">45-64</input>
+                <input id="shared_65+_filter" type="checkbox" title="ageFilter" value='65+' class="shared_filters">65+</input>
+                <!--TODO: Note that while the ranges are both possible, the strings for Usages and Response are each different. Those values need to both be stored, or need to be translated by frontend depending on which datasets are checked. -->
             </p>
             <p>Select Location/Regions <!--TODO: Disable all except 'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia' if the Usages dataset is on!-->
                 <br />
