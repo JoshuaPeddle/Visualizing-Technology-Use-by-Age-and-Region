@@ -28,6 +28,7 @@ $(function () {
         //functionality wise, to handle multiple selections, we pass arrays containing the search terms into usageSearch and responsesSearch. 
         //Later in this, we remove any key with only empty arrays.
         //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
+        //geos must also now be translated, since we use Value for geojson on them. 
         let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],[],[],[],[],[],[],[]] //this assigns all eight variables their own individual empty arrays on a single line.
         let usagesSearch = {
             geo:geos,
