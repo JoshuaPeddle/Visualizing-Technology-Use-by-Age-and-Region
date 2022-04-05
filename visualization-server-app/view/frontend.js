@@ -58,7 +58,7 @@ $(function () {
      */
     function getResponses(data) {
         // Sample call to responses
-        let data = {
+        data = {
             geo: 'Nova Scotia',
             ageGroup: 'Total, 15 years and over',
             sex: 'Female',
@@ -94,7 +94,7 @@ $(function () {
      */
     function getUsages(data) {
         // Sample call to usages
-        let data = {
+        data = {
             geo: 'Canada', 
             serviceType: 'Have access to the Internet at home', 
             ageGroup: 'Total, Internet users aged 15 years and over', 
