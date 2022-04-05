@@ -40,15 +40,16 @@
         </div>
         <div id="shared_filters">
             <p>Select ages
-                <br />
-                <input id="shared_15+_filter" type="checkbox" title="ageFilter" class="shared_filters">15+</input>
-                <input id="shared_15-24_filter" type="checkbox" title="ageFilter" class="shared_filters">15-24</input>
-                <input id="shared_25-54_filter" type="checkbox" title="ageFilter" class="shared_filters">25-54</input>
-                <input id="shared_55-64_filter" type="checkbox" title="ageFilter" class="shared_filters">55-64</input>
-                <input id="shared_65+_filter" type="checkbox" title="ageFilter" class="shared_filters">65+</input>
-                <!--TODO: Note that while the ranges are identical, the strings for Usages and Response are each different. Those values need to both be stored, or need to be translated by frontend depending on which datasets are checked. -->
+                <select id="ages_selector">
+                    <option id="shared_15+_filter"   title="ageFilter" value='15+' class="shared_filters">15+</option>
+                    <option id="shared_15-24_filter"   title="ageFilter" value='15-24' class="shared_filters">15-24</option>
+                    <option id="shared_25-54_filter"   title="ageFilter" value='25-44' class="shared_filters">25-44</option>
+                    <option id="shared_55-64_filter"   title="ageFilter" value='45-64' class="shared_filters">45-64</option>
+                    <option id="shared_65+_filter"   title="ageFilter" value='65+' class="shared_filters">65+</option>
+                </select>
+                <!--TODO: Note that while the ranges are both possible, the strings for Usages and Response are each different. Those values need to both be stored, or need to be translated by frontend depending on which datasets are checked. -->
             </p>
-            <p>Select Location/Regions <!--TODO: Disable all except 'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia' if the Usages dataset is on!-->
+            <p>Select at least one Location/Region, but as many as you like! <!--TODO: Disable all except 'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia' if the Usages dataset is on!-->
                 <br />
                 <input id="shared_canada_filter" type="checkbox" title="locationFilter" value = "CA" class="shared_filters">Canada</input>
                 <input id="shared_atlantic_filter" type="checkbox" title="locationFilter" value = "Atlantic" class="shared_filters">Atlantic Provinces</input>
@@ -67,42 +68,47 @@
         </div>
         <div id="response_specific_filters">
             <p>Select sex.
-                <br />
-                <input id="response_female_filter" type="checkbox" title="sexFilter" value='Female' class="response_specific_filters">Female</input>
-                <input id="response_male_filter" type="checkbox" title="sexFilter" value='Male' class="response_specific_filters">Male</input>
-                <input id="response_both_sexes_filter" type="checkbox" title="sexFilter" value='Both sexes' class="response_specific_filters">Both</input>
+                <select id="sexes_selector">
+                    <option id="response_female_filter"   title="sexFilter" value='Female' class="response_specific_filters">Female</option>
+                    <option id="response_male_filter"   title="sexFilter" value='Male' class="response_specific_filters">Male</option>
+                    <option id="response_both_sexes_filter"   title="sexFilter" value='Both sexes' class="response_specific_filters">Both</option>
+                </select>
             </p>
             <p>Select filters for questions.
-                <br />
-                <input id="response_helps_communicate_filter" type="checkbox" title="questionFilter" value='Helps to communicate' class="response_specific_filters" search = "">Helps to Communicate</input>
-                <input id="response_saves_time_filter" type="checkbox" title="questionFilter" value= 'Saves time' class="response_specific_filters">Saves Time</input>
-                <input id="response_interferes_filter" type="checkbox" title="questionFilter" value= 'Interferes with other things in life' class="response_specific_filters">Interferes with other things in life</input>
-                <input id="response_helps_creative_filter" type="checkbox" title="questionFilter" value='Helps to be more creative' class="response_specific_filters">Helps to be more creative</input>
-                <input id="response_helps_decisions_filter" type="checkbox" title="questionFilter" value='Helps make more informed decisions' class="response_specific_filters">Helps to make informed decisions</input>
-
+                <select id="questions_selector">
+                <option id="response_helps_communicate_filter"   title="questionFilter" value='Helps to communicate' class="response_specific_filters" search = "">Helps to Communicate</option>
+                <option id="response_saves_time_filter"   title="questionFilter" value= 'Saves time' class="response_specific_filters">Saves Time</option>
+                <option id="response_interferes_filter"   title="questionFilter" value= 'Interferes with other things in life' class="response_specific_filters">Interferes with other things in life</option>
+                <option id="response_helps_creative_filter"   title="questionFilter" value='Helps to be more creative' class="response_specific_filters">Helps to be more creative</option>
+                <option id="response_helps_decisions_filter"   title="questionFilter" value='Helps make more informed decisions' class="response_specific_filters">Helps to make informed decisions</option>
+                </select>
             </p>
             <p>Select filters for answers.
                 <br />
-                <input id="response_always/often_filter" type="checkbox" title="responseSubfilter" value='Always or often' class="response_specific_filters">Always/Often</input>
-                <input id="response_always_filter" type="checkbox" title="responseSubfilter" value='Always' class="response_specific_filters">Always</input>
-                <input id="response_often_filter" type="checkbox" title="responseSubfilter" value='Often' class="response_specific_filters">Often</input>
-                <input id="response_sometimes_filter" type="checkbox" title="responseSubfilter" value='Sometimes' class="response_specific_filters">Sometimes</input>
-                <input id="response_rarely/never_filter" type="checkbox" title="responseSubfilter" value='Rarely or never' class="response_specific_filters">Rarely/Never</input>
-                <input id="response_rarely_filter" type="checkbox" title="responseSubfilter" value='Rarely' class="response_specific_filters">Rarely</input>
-                <input id="response_never_filter" type="checkbox" title="responseSubfilter" value='Never' class="response_specific_filters">Never</input>
-                <input id="response_don't know_filter" type="checkbox" title="responseSubfilter" value="Don't know/refusal/not stated" class="response_specific_filters">Don't know</input>
+                <select id="responses_selector">
+                <option id="response_always/often_filter"   title="responseSubfilter" value='Always or often' class="response_specific_filters">Always/Often</option>
+                <option id="response_always_filter"   title="responseSubfilter" value='Always' class="response_specific_filters">Always</option>
+                <option id="response_often_filter"   title="responseSubfilter" value='Often' class="response_specific_filters">Often</option>
+                <option id="response_sometimes_filter"   title="responseSubfilter" value='Sometimes' class="response_specific_filters">Sometimes</option>
+                <option id="response_rarely/never_filter"   title="responseSubfilter" value='Rarely or never' class="response_specific_filters">Rarely/Never</option>
+                <option id="response_rarely_filter"   title="responseSubfilter" value='Rarely' class="response_specific_filters">Rarely</option>
+                <option id="response_never_filter"   title="responseSubfilter" value='Never' class="response_specific_filters">Never</option>
+                <option id="response_don't know_filter"   title="responseSubfilter" value="Don't know/refusal/not stated" class="response_specific_filters">Don't know</option>
+                </select>
             </p>
         </div>
         <div id="usage_specific_filters">
             <p>Select filters for data statistics.
                 <br />
-                <input id="service_internet_at_home_filter" type="checkbox" title="serviceType"value='Have access to the Internet at home' class="usage_specific_filters">Have access to the Internet at home</input>
-                <input id="service_smarthome_at_home_filter" type="checkbox" title="serviceType"value='Use of a smart home devices in primary residence ' class="usage_specific_filters">Use of smart home devices in primary residence</input>
-                <input id="service_smartphone_personal_filter" type="checkbox" title="serviceType"value='Have a smartphone for personal use' class="usage_specific_filters">Have a smartphone for personal use</input>
-                <input id="service_social_networking_acccounts_filter" type="checkbox" title="serviceType"value='Have social networking accounts' class="usage_specific_filters">Have social networking accounts</input>
-                <input id="service_video_streaming_filter" type="checkbox" title="serviceType"value='Used or purchased music streaming services' class="usage_specific_filters">Used or purchased video streaming services</input>
-                <input id="service_government_services_online_filter" type="checkbox" title="serviceType"value='Used government services online ' class="usage_specific_filters">Used government services online </input>
-                <input id="service_shopped_online_filter" type="checkbox" title="serviceType"value='Shopped online' class="usage_specific_filters">Shopped online</input>
+                <select id="services_selector">
+                <option id="service_internet_at_home_filter"   title="serviceType"value='Have access to the Internet at home' class="usage_specific_filters">Have access to the Internet at home</option>
+                <option id="service_smarthome_at_home_filter"   title="serviceType"value='Use of a smart home devices in primary residence ' class="usage_specific_filters">Use of smart home devices in primary residence</option>
+                <option id="service_smartphone_personal_filter"   title="serviceType"value='Have a smartphone for personal use' class="usage_specific_filters">Have a smartphone for personal use</option>
+                <option id="service_social_networking_acccounts_filter"   title="serviceType"value='Have social networking accounts' class="usage_specific_filters">Have social networking accounts</option>
+                <option id="service_video_streaming_filter"   title="serviceType"value='Used or purchased music streaming services' class="usage_specific_filters">Used or purchased video streaming services</option>
+                <option id="service_government_services_online_filter"   title="serviceType"value='Used government services online ' class="usage_specific_filters">Used government services online </option>
+                <option id="service_shopped_online_filter"   title="serviceType"value='Shopped online' class="usage_specific_filters">Shopped online</option>
+                </select>
             </p>
         </div>
         <button id="requestSearch">Search</button>
