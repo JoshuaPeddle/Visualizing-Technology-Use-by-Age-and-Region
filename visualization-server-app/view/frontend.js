@@ -10,21 +10,9 @@ $(function () {
         $("#response_selector").prop("checked", "true")
     });
 
-    /**
-    * Event to to keep track of user selecting dataset checkboxes
-    */
-    $(".dataset_selector").change(function (e) {
-        e.preventDefault();
-        alert(JSON.stringify([this.title, this.checked]))  // Alert to changes in dataset selectors
-        if(this.title == "responseSelector" && this.checked == true) { //for testing
-            getResponses()
-        }
-        else if(this.title == "usageSelector" && this.checked == true){
-            getUsages()
-        }
-    });
+
     //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
-    $("#requestSearch").change(function(e){
+    $("#requestSearch").click(function(e){
         //functionality wise, to handle multiple selections, we pass arrays containing the search terms into usageSearch and responsesSearch. 
         //Later in this, we remove any key with only empty arrays.
         //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
@@ -60,13 +48,13 @@ $(function () {
         //some kind of each() code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
         sharedFilters.each(function(){
             let value = $(this).val()
-            if($(this).checked==true){
+            if($(this).prop("checked")==true){
                 //This is either an age filter or location filter. Check, then send to child functions to translate into a valid search string for mongoDB.
-                if($(this).title=='ageFilter' && usage_selected==true) {
+                if($(this).prop("title") =='ageFilter' && usage_selected==true) {
                     toPush = handleAgeFilterValueUsage(value)
                     ageGroupsUsages.push(toPush)
                 }
-                if($(this).title=='ageFilter' && response_selected==true) {
+                if($(this).prop("title")=='ageFilter' && response_selected==true) {
                     toPush = handleAgeFilterValueResponse(value)
                     toPush.forEach(element => ageGroupsResponses.push(element))//toPush may have more than one element, so this should push each of them without issue.
                 }
@@ -77,8 +65,8 @@ $(function () {
 
         //code should go here to remove empty dictionary entries, unless we have a more elegant solution. 
         //I expect our validation code to throw an error if they remain, but it simplifies things considerably to have them included before this point.
-        getResponses(responsesSearch)
-        getUsages(usagesSearch)
+        if (response_selected){getResponses(responsesSearch)}
+        if (usage_selected){getUsages(usagesSearch)}
     });
     function handleAgeFilterValueUsage(incomingValue){
         //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
@@ -125,7 +113,7 @@ $(function () {
                     console.log(JSON.stringify(el))
                     responses.push(el)
                 })
-                console.log("Responses returning, contents:", console.log(responses))
+                console.log("Responses returning, contents:", responses)
                 return responses //This doesn't appear to work.
             },
             //We can use the alert box to show if there's an error in the server-side
