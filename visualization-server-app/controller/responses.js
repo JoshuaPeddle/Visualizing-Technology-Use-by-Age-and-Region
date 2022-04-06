@@ -40,7 +40,7 @@ function validateSearchTerms(searchTerms)  {
     //console.log("validateSearchTerms array of searchTerms: ")
     //console.log(searchTerms)
     //These arrays contain all unique entries in our dataset for each column. We validate each search term individually below.
-    validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia'] //all the sets to input, will do later.
+    validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
     validAgeGroup = ['Total, 15 years and over', '15 to 24 years','25 to 34 years', '25 to 54 years', '35 to 44 years', '45 to 54 years', '55 to 64 years', '65 years and over', '65 to 74 years', '75 years and over' ] 
     validSex = ['Male', 'Female', 'Both sexes']
     validQuestion = ['Helps make more informed decisions', 'Helps to be more creative', 'Helps to communicate', 'Interferes with other things in life', 'Saves time' ]

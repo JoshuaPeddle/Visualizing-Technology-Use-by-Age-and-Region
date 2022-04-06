@@ -34,7 +34,7 @@ module.exports.getUsages = async (req, res) => {
 
      //console.log("validateSearchTerms array of searchTerms: ")
      //console.log(searchTerms)
-     validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']  //all the sets to input, will do later.
+     validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
      validAgeGroup = ['Total, Internet users aged 15 years and over', 'Internet users aged 15 to 24 years', 'Internet users aged 25 to 44 years', 'Internet users aged 45 to 64 years', 'Internet users aged 65 years and over']
      validServiceType = ['Have access to the Internet at home', 'Use of a smart home devices in primary residence ', 'Have a smartphone for personal use', 'Have social networking accounts', 'Used or purchased video streaming services', 'Used or purchased music streaming services', 'Used government services online ', 'Shopped online'] //smart home devices really does have a trailing whitespace. 
      validIncome = ['Total, household income quartiles', 'Lowest quartile household income', 'Second quartile household income', 'Third quartile household income', 'Highest quartile household income']

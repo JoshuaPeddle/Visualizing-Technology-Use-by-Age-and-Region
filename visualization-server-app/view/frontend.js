@@ -16,12 +16,21 @@ $(function () {
             }
             else if(this.id == "response_selector" && this.checked == false){
             $("#response_specific_filters").hide(1000)
+            //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user.
+            $("#shared_newfoundland_filter").hide(1000)
+            $("#shared_pei_filter").hide(1000)
+            $("#shared_novascotia_filter").hide(1000)
+            $("#shared_newbrunswick_filter").hide(1000)
+            $("#shared_manitoba_filter").hide(1000)
+            $("#shared_saskatchewan_filter").hide(1000)
+            $("#shared_alberta_filter").hide(1000)
             }
             else if(this.id == "usage_selector" && this.checked == true){
             $("#usage_specific_filters").show(600)
             }
             else if(this.id == "usage_selector" && this.checked == false){
             $("#usage_specific_filters").hide(1000)
+            
             }
         })
 
