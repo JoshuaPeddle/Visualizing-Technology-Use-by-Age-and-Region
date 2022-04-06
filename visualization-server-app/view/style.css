@@ -17,7 +17,12 @@ body {
 #locations_container{
     display:inline grid;
     grid-template-columns: auto auto auto auto auto auto auto auto;
-    width: 50em;
+    width: 55em;
+}
+#response_specific_filters{
+    display:inline grid;
+    grid-template-columns: auto auto auto;
+    width: 55em;  
 }
 #map {
     width: calc(100vw - 80px);

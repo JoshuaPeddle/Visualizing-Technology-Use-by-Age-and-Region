@@ -34,23 +34,13 @@
             <p> Select dataset(s)
                 <br />
                 <input id="response_selector" type="checkbox" title="responseSelector" class="dataset_selector" />
-                Responses
-                <input id="usage_selector" type="checkbox" title="usageSelector" class="dataset_selector" /> Usages
+                Opinions on Technology
+                <input id="usage_selector" type="checkbox" title="usageSelector" class="dataset_selector" /> Use of Technology by Age
             </p>
         </div>
         <div id="shared_filters">
-            <p>Select ages
-                <select id="ages_selector">
-                    <option id="shared_15+_filter"   title="ageFilter" value='15+' class="shared_filters">15+</option>
-                    <option id="shared_15-24_filter"   title="ageFilter" value='15-24' class="shared_filters">15-24</option>
-                    <option id="shared_25-54_filter"   title="ageFilter" value='25-44' class="shared_filters">25-44</option>
-                    <option id="shared_55-64_filter"   title="ageFilter" value='45-64' class="shared_filters">45-64</option>
-                    <option id="shared_65+_filter"   title="ageFilter" value='65+' class="shared_filters">65+</option>
-                </select>
 
-            </p>
             <p id="locations_paragraph">Select at least one Location/Region, but as many as you like!</p>
-            <br />
             <div id="locations_container">
                 <input id="shared_canada_filter" type="checkbox" title="locationFilter" value = "CA" class="shared_filters"></input>
                 <label for="shared_canada_filter">Canada</label>
@@ -79,6 +69,17 @@
                 <input id="shared_britishcolumbia_filter" type="checkbox" title="locationFilter" value = "BC" class="shared_filters"></input>
                 <label for="shared_britishcolumbia_filter">British Columbia</label>
             </div>
+
+            <p>Select ages
+                <select id="ages_selector">
+                    <option id="shared_15+_filter"   title="ageFilter" value='15+' class="shared_filters">15+</option>
+                    <option id="shared_15-24_filter"   title="ageFilter" value='15-24' class="shared_filters">15-24</option>
+                    <option id="shared_25-54_filter"   title="ageFilter" value='25-44' class="shared_filters">25-44</option>
+                    <option id="shared_55-64_filter"   title="ageFilter" value='45-64' class="shared_filters">45-64</option>
+                    <option id="shared_65+_filter"   title="ageFilter" value='65+' class="shared_filters">65+</option>
+                </select>
+
+            </p>
         </div>
         <div id="response_specific_filters">
             <p>Select sex.
@@ -98,7 +99,6 @@
                 </select>
             </p>
             <p>Select filters for answers.
-                <br />
                 <select id="responses_selector">
                 <option id="response_always/often_filter"   title="responseSubfilter" value='Always or often' class="response_specific_filters">Always/Often</option>
                 <option id="response_always_filter"   title="responseSubfilter" value='Always' class="response_specific_filters">Always</option>
