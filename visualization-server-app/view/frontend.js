@@ -1,4 +1,6 @@
 
+
+
 let current_responses = null
 let current_usages = null;
 
@@ -178,6 +180,9 @@ $(function () {
             $.when(getResponses(responsesSearch)).done(()=>{
                 // We have the responses in here set to global variable current_response
                 console.log (current_responses)
+                drawResponses(current_responses)
+
+                
             })
         }
            
@@ -186,6 +191,7 @@ $(function () {
             $.when(getUsages(usagesSearch)).done(()=>{
                 //We have the usages here set to global variable current_usage
                 console.log (current_usages)
+                drawResponses(current_usages)
             })
         }
     });
