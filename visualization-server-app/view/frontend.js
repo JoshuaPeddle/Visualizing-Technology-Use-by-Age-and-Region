@@ -11,7 +11,8 @@ $(function () {
     */
     $(document).ready(function () {
         // Test setting the checkbox to know frontend.js is running
-        $("#response_selector").prop("checked", "true")
+        $("#response_selector").prop("checked", "true").change()
+        $("#usage_selector").change()
         
     });
     $(".dataset_selector").change(function(){
