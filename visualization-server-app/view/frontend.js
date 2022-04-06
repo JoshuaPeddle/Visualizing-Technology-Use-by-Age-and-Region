@@ -10,7 +10,20 @@ $(function () {
         $("#response_selector").prop("checked", "true")
         
     });
-
+    $(".dataset_selector").change(function(){
+            if(this.id == "response_selector" && this.checked == true){
+            $("#response_specific_filters").show(600)
+            }
+            else if(this.id == "response_selector" && this.checked == false){
+            $("#response_specific_filters").hide(1000)
+            }
+            else if(this.id == "usage_selector" && this.checked == true){
+            $("#usage_specific_filters").show(600)
+            }
+            else if(this.id == "usage_selector" && this.checked == false){
+            $("#usage_specific_filters").hide(1000)
+            }
+        })
 
     //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
     $("#requestSearch").click(function(e){
