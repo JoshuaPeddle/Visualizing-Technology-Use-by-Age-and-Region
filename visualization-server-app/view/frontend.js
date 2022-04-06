@@ -13,17 +13,39 @@ $(function () {
     $(".dataset_selector").change(function(){
             if(this.id == "response_selector" && this.checked == true){
             $("#response_specific_filters").show(600)
+            //show these filters again if they were hidden.
+            $("#shared_newfoundland_filter").show(600)
+            $('label[for="shared_newfoundland_filter"]').show(600) //This, amazingly, actually works. Praise to Stack Overflow for documenting better than the docs do.
+            $("#shared_pei_filter").show(600)
+            $('label[for="shared_pei_filter"]').show(600)
+            $("#shared_novascotia_filter").show(600)
+            $('label[for="shared_novascotia_filter"]').show(600)
+            $("#shared_newbrunswick_filter").show(600)
+            $('label[for="shared_newbrunswick_filter"]').show(600)
+            $("#shared_manitoba_filter").show(600)
+            $('label[for="shared_manitoba_filter"]').show(600)
+            $("#shared_saskatchewan_filter").show(600)
+            $('label[for="shared_saskatchewan_filter"]').show(600)
+            $("#shared_alberta_filter").show(600)
+            $('label[for="shared_alberta_filter"]').show(600)
             }
             else if(this.id == "response_selector" && this.checked == false){
             $("#response_specific_filters").hide(1000)
             //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user.
             $("#shared_newfoundland_filter").hide(1000)
+            $('label[for="shared_newfoundland_filter"]').hide(1000) //This, amazingly, actually works. Praise to Stack Overflow for documenting better than the docs do.
             $("#shared_pei_filter").hide(1000)
+            $('label[for="shared_pei_filter"]').hide(1000)
             $("#shared_novascotia_filter").hide(1000)
+            $('label[for="shared_novascotia_filter"]').hide(1000)
             $("#shared_newbrunswick_filter").hide(1000)
+            $('label[for="shared_newbrunswick_filter"]').hide(1000)
             $("#shared_manitoba_filter").hide(1000)
+            $('label[for="shared_manitoba_filter"]').hide(1000)
             $("#shared_saskatchewan_filter").hide(1000)
+            $('label[for="shared_saskatchewan_filter"]').hide(1000)
             $("#shared_alberta_filter").hide(1000)
+            $('label[for="shared_alberta_filter"]').hide(1000)
             }
             else if(this.id == "usage_selector" && this.checked == true){
             $("#usage_specific_filters").show(600)
