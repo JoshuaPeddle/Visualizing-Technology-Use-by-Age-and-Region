@@ -1,4 +1,6 @@
 
+
+
 let current_responses = null
 let current_usages = null;
 
@@ -177,7 +179,9 @@ $(function () {
             // We have to wait for the request to complete before using the responses
             $.when(getResponses(responsesSearch)).done(()=>{
                 // We have the responses in here set to global variable current_response
-                console.log (current_responses)
+                drawResponses(current_responses)
+
+                
             })
         }
            
@@ -185,7 +189,8 @@ $(function () {
             // We have to wait for the request to complete before using the usages
             $.when(getUsages(usagesSearch)).done(()=>{
                 //We have the usages here set to global variable current_usage
-                console.log (current_usages)
+                // drawResponses
+                drawUsages(current_usages)
             })
         }
     });
@@ -231,7 +236,6 @@ $(function () {
         else if(incomingValue=='SK'){incomingValue=verification[10]}
         else if(incomingValue=='AB'){incomingValue=verification[11]}
         else if(incomingValue=='BC'){incomingValue=verification[12]}
-        console.log(incomingValue)
         return incomingValue
     }
     /**
