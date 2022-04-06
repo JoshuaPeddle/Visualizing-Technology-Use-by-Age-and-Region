@@ -114,6 +114,21 @@ function handleGeoReverse(incomingValue){
 }
 
 // Get a color based on the value. iIm going to change this to hue based approach for finer detail.
+
+
+function getColorHue(d) {
+    return d > 90 ? '#800026' :
+           d > 75  ? '#BD0026' :
+           d > 60  ? '#E31A1C' :
+           d > 45  ? '#FC4E2A' :
+           d > 30   ? '#FD8D3C' :
+           d > 15   ? '#FEB24C' :
+           d > 0   ? '#FED976' :
+                      '#FFEDA0';
+}
+
+
+
 function getColor(d) {
     return d > 90 ? '#800026' :
            d > 75  ? '#BD0026' :
@@ -168,8 +183,8 @@ function drawResponses(responses){
 function drawUsages(usages){
     console.log("Map received", usages)
      // No need to check anything. Can just draw
-    responses.forEach(response =>{
-            paintRegion(handleGeoReverse(response.geo), response.value)
+     usages.forEach(usage =>{
+            paintRegion(handleGeoReverse(usage.geo), usage.value)
         
     })
 }
