@@ -81,8 +81,42 @@ validUnit = ['Persons', 'Percent']
 //(validator.isFloat(searchTerms.query['value']) || validator.isInteger(searchTerms.query['value']))
 //use validator.isIn(searchTerm, validArray) to check the rest.
 let v1 = (validator.isFloat(searchTerms['value']) || validator.isInteger(searchTerms['value']))
-let v2 = validator.isIn(searchTerms['geo'], validGeo)
-let v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
+let v2 = true  // This is true in case it's undefined.
+     if(searchTerms['geo'] != undefined) {
+        if(Array.isArray(searchTerms['geo']) == false){ //if not an array, use original code.
+            v2 = validator.isIn(searchTerms['geo'], validGeo)
+        }
+        else{ //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
+            let truthy = [] //store the boolean true/falses of everything we forEach.
+            searchTerms['geo'].forEach(element => {truthy.push(validator.isIn(element, validGeo))});
+
+            if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
+                v2 = true 
+            }
+
+            else {
+                v2= false
+            }
+        }
+    }
+let v3 = true //this is true in case it's undefined.
+     if(searchTerms['ageGroup'] != undefined) {
+        if(Array.isArray(searchTerms['ageGroup']) == false){ //if not an array, use original code.
+            v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
+        }
+        else{ //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
+            let truthy = [] //store the boolean true/falses of everything we forEach.
+            searchTerms['ageGroup'].forEach(element => {truthy.push(validator.isIn(element, validAgeGroup))});
+
+            if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
+                v3 = true
+            }
+
+            else {
+                v3= false
+            }
+        }
+    }
 let v4 = validator.isIn(searchTerms['sex'], validSex)
 let v5 = validator.isIn(searchTerms['question'], validQuestion)
 let v6 = validator.isIn(searchTerms['unit'], validUnit)
