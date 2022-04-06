@@ -93,7 +93,7 @@ $(function () {
 
 });
 
-
+/// Need to parse geo from mongo style to getJSON style
 function handleGeoReverse(incomingValue){
     //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
     let verification = ['CA', 'Atlantic', 'NL', 'PE', 'NS', 'NB', 'QC', 'ON', 'Prairie', 'MB', 'SK', 'AB', 'BC']
@@ -110,11 +110,10 @@ function handleGeoReverse(incomingValue){
     else if(incomingValue=='Saskatchewan'){incomingValue=verification[10]}
     else if(incomingValue=='Alberta'){incomingValue=verification[11]}
     else if(incomingValue=='British Columbia'){incomingValue=verification[12]}
-    console.log(incomingValue)
     return incomingValue
 }
 
-
+// Get a color based on the value. iIm going to change this to hue based approach for finer detail.
 function getColor(d) {
     return d > 90 ? '#800026' :
            d > 75  ? '#BD0026' :
@@ -126,7 +125,7 @@ function getColor(d) {
                       '#FFEDA0';
 }
 function style(percent) {
-    
+    // Returns a style for the drawn region. Color is determined by percent
     return {
         fillColor: getColor(percent),
         weight: 2,
@@ -144,7 +143,6 @@ function style(percent) {
 */
 
 function paintRegion(region, percent) {
-    console.log(region,region)
     layers[region].setStyle(style(percent))
     layers[region].addTo(map)
 }
@@ -159,16 +157,19 @@ function clearRegion(region) {
 
 function drawResponses(responses){
     console.log("Map received", responses)
-
-
     responses.forEach(response =>{
-        console.log(response)
+        // Need to check if the estimate is percentage of persons
         if (response.estimate = "Percentage of persons"){
             paintRegion(handleGeoReverse(response.geo), response.value)
         }
     })
 }
 
-function receiveUsages(usages){
+function drawUsages(usages){
     console.log("Map received", usages)
+     // No need to check anything. Can just draw
+    responses.forEach(response =>{
+            paintRegion(handleGeoReverse(response.geo), response.value)
+        
+    })
 }
