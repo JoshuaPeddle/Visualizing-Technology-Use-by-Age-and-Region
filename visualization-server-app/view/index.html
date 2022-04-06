@@ -47,10 +47,11 @@
                     <option id="shared_55-64_filter"   title="ageFilter" value='45-64' class="shared_filters">45-64</option>
                     <option id="shared_65+_filter"   title="ageFilter" value='65+' class="shared_filters">65+</option>
                 </select>
-                <!--TODO: Note that while the ranges are both possible, the strings for Usages and Response are each different. Those values need to both be stored, or need to be translated by frontend depending on which datasets are checked. -->
+
             </p>
-            <p>Select at least one Location/Region, but as many as you like! <!--TODO: Disable all except 'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia' if the Usages dataset is on!-->
-                <br />
+            <p id="locations_paragraph">Select at least one Location/Region, but as many as you like!</p>
+            <br />
+            <div id="locations_container">
                 <input id="shared_canada_filter" type="checkbox" title="locationFilter" value = "CA" class="shared_filters"></input>
                 <label for="shared_canada_filter">Canada</label>
                 <input id="shared_atlantic_filter" type="checkbox" title="locationFilter" value = "Atlantic" class="shared_filters"></input>
@@ -77,7 +78,7 @@
                 <label for="shared_alberta_filter">Alberta</label>
                 <input id="shared_britishcolumbia_filter" type="checkbox" title="locationFilter" value = "BC" class="shared_filters"></input>
                 <label for="shared_britishcolumbia_filter">British Columbia</label>
-            </p>
+            </div>
         </div>
         <div id="response_specific_filters">
             <p>Select sex.
