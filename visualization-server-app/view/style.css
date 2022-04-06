@@ -19,6 +19,20 @@ body {
     grid-template-columns: auto auto auto auto auto auto auto auto;
     width: 55em;
 }
+#ages_selector {
+    display:flex;
+    flex-wrap: wrap;
+}
+#requestSearch{
+    width: 8em;
+    height: 4vh;
+    font-size: medium;
+}
+#requestExport{
+    width: 8em;
+    height: 4vh;
+    font-size: medium;
+}
 #response_specific_filters{
     display:inline grid;
     grid-template-columns: auto auto auto;
