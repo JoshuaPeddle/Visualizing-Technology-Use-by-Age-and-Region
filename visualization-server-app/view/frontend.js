@@ -112,7 +112,7 @@ $(function () {
             geo:geos,
             serviceType:serviceTypes, 
             ageGroup:ageGroupsUsages, 
-            income:incomes, 
+            //income:incomes, Had to remove for now. Was crashing server
         }
 
         let responsesSearch = {
@@ -147,7 +147,7 @@ $(function () {
         if(incomingValue=='15+'){incomingValue=verification[0]}
         else if(incomingValue=='15-24'){incomingValue=verification[1]}
         else if(incomingValue=='25-44'){incomingValue=[verification[2],verification[4]]}
-        else if(incomingValue=='55-64'){incomingValue=verification[6]}
+        else if(incomingValue=='45-64'){incomingValue=verification[6]}
         else if(incomingValue=='65+'){incomingValue=verification[7]}
         return incomingValue
     }
@@ -158,17 +158,18 @@ $(function () {
         let verification = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
         if(incomingValue=='CA'){incomingValue=verification[0]}
         else if(incomingValue=='Atlantic'){incomingValue=verification[1]}
-        else if(incomingValue=='NL'){incomingValue=[verification[2],verification[4]]}
-        else if(incomingValue=='PE'){incomingValue=verification[6]}
-        else if(incomingValue=='NS'){incomingValue=verification[7]}
-        else if(incomingValue=='NB'){incomingValue=verification[7]}
-        else if(incomingValue=='QC'){incomingValue=verification[7]}
-        else if(incomingValue=='ON+'){incomingValue=verification[7]}
-        else if(incomingValue=='Prairie'){incomingValue=verification[7]}
-        else if(incomingValue=='MB'){incomingValue=verification[7]}
-        else if(incomingValue=='SK'){incomingValue=verification[7]}
-        else if(incomingValue=='AB'){incomingValue=verification[7]}
-        else if(incomingValue=='BC'){incomingValue=verification[7]}
+        else if(incomingValue=='NL'){incomingValue=verification[2]}
+        else if(incomingValue=='PE'){incomingValue=verification[3]}
+        else if(incomingValue=='NS'){incomingValue=verification[4]}
+        else if(incomingValue=='NB'){incomingValue=verification[5]}
+        else if(incomingValue=='QC'){incomingValue=verification[6]}
+        else if(incomingValue=='ON'){incomingValue=verification[7]}
+        else if(incomingValue=='Prairie'){incomingValue=verification[8]}
+        else if(incomingValue=='MB'){incomingValue=verification[9]}
+        else if(incomingValue=='SK'){incomingValue=verification[10]}
+        else if(incomingValue=='AB'){incomingValue=verification[11]}
+        else if(incomingValue=='BC'){incomingValue=verification[12]}
+        console.log(incomingValue)
         return incomingValue
     }
     /**
@@ -176,7 +177,7 @@ $(function () {
      */
     function getResponses(data) {
         // Sample call to responses
-        data = {
+        data1 = {
             geo: 'Nova Scotia',
             ageGroup: 'Total, 15 years and over',
             sex: 'Female',
@@ -189,14 +190,12 @@ $(function () {
             url: '/responses',
             type: 'GET',
             data: data,
-            contentType: 'application/json',
+            dataType: "json",
             success: function (response) {
-                if (response = "no responses"){return response}
+                if (response == "no responses"){return response}
                 response.forEach(el => {
-                    console.log(JSON.stringify(el))
                     responses.push(el)
                 })
-                console.log("Responses returning, contents:", responses)
                 return responses //This doesn't appear to work.
             },
             //We can use the alert box to show if there's an error in the server-side
@@ -206,6 +205,7 @@ $(function () {
             }
         });
         console.log("Responses:", responses)
+        
     }
 
     /**
@@ -213,7 +213,7 @@ $(function () {
      */
     function getUsages(data) {
         // Sample call to usages
-        data = {
+        data1 = {
             geo: 'Canada', 
             serviceType: 'Have access to the Internet at home', 
             ageGroup: 'Total, Internet users aged 15 years and over', 
@@ -224,10 +224,10 @@ $(function () {
             url: '/usages',
             type: 'GET',
             data: data,
-            contentType: 'application/json',
+            dataType: "json",
             success: function (response) {
+                if (response == "no usages"){return response}
                 response.forEach(el => {
-                    console.log(JSON.stringify(el))
                     usages.push(el)
                 })
                 return usages

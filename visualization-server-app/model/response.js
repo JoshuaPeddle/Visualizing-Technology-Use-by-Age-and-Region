@@ -44,6 +44,29 @@ class Response {
 
         let collection = await _get_response_collection()
         searchTerms['value'] == undefined ? 0: searchTerms['value'] = parseFloat(searchTerms['value'])
+        // Handle get in array and as a string
+        let geos = []
+        if (Array.isArray(searchTerms['geo'])){
+            searchTerms['geo'].forEach(el=>{
+                geos.push({geo: el})
+        })
+        }else{
+            geos.push({geos: searchTerms['geo']})
+        }
+
+        // Handle edge case with ages
+        let ageFix = [{ageGroup : searchTerms['ageGroup']}];
+        if (Array.isArray(searchTerms['ageGroup'])){
+            ageFix = [{ageGroup : searchTerms['ageGroup'][0]}];
+            if (searchTerms['ageGroup'].length >1 ){
+                ageFix = [{ageGroup: "25 to 34 years"},{ageGroup: "35 to 44 years"}]
+            }
+        }
+        searchTerms = {  $and: [ {$or: ageFix} ,{$or: geos}    ],
+                         sex: searchTerms['sex'],
+                         question: searchTerms['question'],
+                         response: searchTerms['response'],
+                        }
         let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
         console.log("found", matching_responses.length)
         return matching_responses;

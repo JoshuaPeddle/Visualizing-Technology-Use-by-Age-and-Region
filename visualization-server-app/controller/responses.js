@@ -51,8 +51,43 @@ function validateSearchTerms(searchTerms)  {
     // Using ternary operator to keep the number of lines manageable but not set on it.
     // If searchTerms['x'] is undefined, then don't validate & return true. Else, validate searchTerms['x'].
     let v1 = searchTerms['value'] == undefined ? true : validator.isFloat(searchTerms['value']) || validator.isInt(searchTerms['value'])
-    let v2 = searchTerms['geo'] == undefined ? true : validator.isIn(searchTerms['geo'], validGeo)
-    let v3 = searchTerms['ageGroup'] == undefined ? true : validator.isIn(searchTerms['ageGroup'], validAgeGroup)
+
+    let v2 = true  // This is true in case it's undefined.
+    if (searchTerms['geo'] != undefined) {
+        if (Array.isArray(searchTerms['geo']) == false) { //if not an array, use original code.
+            v2 = validator.isIn(searchTerms['geo'], validGeo)
+        }
+        else { //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
+            let truthy = [] //store the boolean true/falses of everything we forEach.
+            searchTerms['geo'].forEach(element => { truthy.push(validator.isIn(element, validGeo)) });
+
+            if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
+                v2 = true
+            }
+
+            else {
+                v2 = false
+            }
+        }
+    }
+    let v3 = true //this is true in case it's undefined.
+    if (searchTerms['ageGroup'] != undefined) {
+        if (Array.isArray(searchTerms['ageGroup']) == false) { //if not an array, use original code.
+            v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
+        }
+        else { //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
+            let truthy = [] //store the boolean true/falses of everything we forEach.
+            searchTerms['ageGroup'].forEach(element => { truthy.push(validator.isIn(element, validAgeGroup)) });
+
+            if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
+                v3 = true
+            }
+
+            else {
+                v3 = false
+            }
+        }
+    }
     let v4 = searchTerms['sex'] == undefined ? true : validator.isIn(searchTerms['sex'], validSex)//
     let v5 = searchTerms['question'] == undefined ? true : validator.isIn(searchTerms['question'], validQuestion)
     let v6 = searchTerms['unit'] == undefined ? true : validator.isIn(searchTerms['unit'], validUnit)
@@ -60,75 +95,7 @@ function validateSearchTerms(searchTerms)  {
     let v8 = searchTerms['estimate'] == undefined ? true : validator.isIn(searchTerms['estimate'], validEstimate)
     //Check all eight conditions to verify the search is valid.s
     return (v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8) ? true : false
-}
 
-
-
-
-async function validateSearchTerms2(searchTerms)  {
-searchTerms = searchTerms
-console.log("Array of searchTerms: ")
-console.log(searchTerms)
-validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia'] //all the sets to input, will do later.
-validAgeGroup = ['Total, 15 years and over', '15 to 24 years','25 to 34 years', '25 to 54 years', '35 to 44 years', '45 to 54 years', '55 to 64 years', '65 years and over', '65 to 74 years', '75 years and over' ] 
-validSex = ['Male', 'Female', 'Both sexes']
-validQuestion = ['Helps make more informed decisions', 'Helps to be more creative', 'Helps to communicate', 'Interferes with other things in life', 'Saves time' ]
-validResponse = ['Always or often', 'Always', 'Often', 'Sometimes', 'Rarely or never', 'Rarely', 'Never', "Don't know/refusal/not stated"]
-validEstimate = ['Number of persons', 'Percentage of persons', 'Low 95% confidence interval, percent', 'High 95% confidence interval, percent']
-validUnit = ['Persons', 'Percent']
-//validValue = 
-
-//(validator.isFloat(searchTerms.query['value']) || validator.isInteger(searchTerms.query['value']))
-//use validator.isIn(searchTerm, validArray) to check the rest.
-let v1 = (validator.isFloat(searchTerms['value']) || validator.isInteger(searchTerms['value']))
-let v2 = true  // This is true in case it's undefined.
-     if(searchTerms['geo'] != undefined) {
-        if(Array.isArray(searchTerms['geo']) == false){ //if not an array, use original code.
-            v2 = validator.isIn(searchTerms['geo'], validGeo)
-        }
-        else{ //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
-            let truthy = [] //store the boolean true/falses of everything we forEach.
-            searchTerms['geo'].forEach(element => {truthy.push(validator.isIn(element, validGeo))});
-
-            if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
-                v2 = true 
-            }
-
-            else {
-                v2= false
-            }
-        }
-    }
-let v3 = true //this is true in case it's undefined.
-     if(searchTerms['ageGroup'] != undefined) {
-        if(Array.isArray(searchTerms['ageGroup']) == false){ //if not an array, use original code.
-            v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
-        }
-        else{ //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
-            let truthy = [] //store the boolean true/falses of everything we forEach.
-            searchTerms['ageGroup'].forEach(element => {truthy.push(validator.isIn(element, validAgeGroup))});
-
-            if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
-                v3 = true
-            }
-
-            else {
-                v3= false
-            }
-        }
-    }
-let v4 = validator.isIn(searchTerms['sex'], validSex)
-let v5 = validator.isIn(searchTerms['question'], validQuestion)
-let v6 = validator.isIn(searchTerms['unit'], validUnit)
-let v7 = validator.isIn(searchTerms['response'], validResponse)
-let v8 = validator.isIn(searchTerms['estimate'], validEstimate)
-//Check all 8 conditions to verify the search is valid.
-if(v1 && v2 && v3 && v4 && v5 && v6 && v7 && v8) { //I'm assuming this functions like java but haven't actually verified it does.
-    return true
-}
-else{
-    return false
-}
 }
 
 
