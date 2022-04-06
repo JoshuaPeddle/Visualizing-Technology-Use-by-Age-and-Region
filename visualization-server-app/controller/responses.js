@@ -113,13 +113,6 @@ function validateSearchTerms(searchTerms)  {
     let responses = JSON.parse(req.body.body)
     // Call static function of Response to create the tsv file
     let tsv_file = await Response.toTSV(responses);
-    // Use express download function to send tsv file to client
-    res.download(tsv_file, async (err) => {
-        if (err == undefined && !keep_tsv) { // If no err, and we dont want to keep the tsv, remove it after sending it
-            fs.rm(tsv_file,(err)=>{
-                if (err) throw err;
-                console.log('tsv file created and sent to client')
-            })
-        }
-    })
+    // Use express send function to send tsv text to client
+    res.send(tsv_file)
 }

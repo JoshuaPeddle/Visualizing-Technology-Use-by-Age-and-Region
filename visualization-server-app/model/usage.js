@@ -84,9 +84,8 @@ class Usage {
         const filename = "/usage_export.tsv"
         const header = "Geo\tService Type\tAge Group\tHousehold Income Quartile\tuom\tValue\n"
         // Write the header
-        await fs.promises.writeFile('model' + filename, header, { flag: 'w' })
 
-        let to_write = ""
+        let to_write = header
         usages.forEach((el) => {
             // el is in string dict notation, use Object.values to get the Usage objects
             let objs = Object.values(el)
@@ -96,12 +95,9 @@ class Usage {
                 to_write = to_write.concat(sub_el, '\t')
             })
             to_write = to_write.concat('\n')
-
-
         })
-        await fs.promises.appendFile('model' + filename, to_write)
 
-        return __dirname + filename;
+        return to_write;
 
     }
 

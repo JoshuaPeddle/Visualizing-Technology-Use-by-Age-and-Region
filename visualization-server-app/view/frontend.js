@@ -196,6 +196,25 @@ $(function () {
     });
 
 
+    /**
+     * Code for export button
+     */
+    $("#requestExport").click(function(){
+        let response_selected = false
+        let usage_selected = false
+        $(".dataset_selector").each(function(){
+            if(this.title == "responseSelector" && this.checked == true){
+            response_selected = true
+            }
+            else if(this.title == "usageSelector" && this.checked == true){
+            usage_selected = true
+            }
+
+        })
+        if (response_selected){requestExportResponses()}
+        if (usage_selected){requestExportUsages()}
+    })
+
 
     function handleAgeFilterValueUsage(incomingValue){
         //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
@@ -282,17 +301,24 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
-
     }
     function requestExportUsages() {
+        console.log("got", current_responses)
         //Note: Do not call directly. Should only be called via the requestExport button.
         $.ajax({
             url: '/usages/tsv',
             type: 'POST',
-            data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
-            contentType: 'application/json',
+            data: {body: JSON.stringify(current_usages)},
             success: function (response) {
-                //Does anything go here? Just making the post should complete it.
+                //https://javascript.info/blob //https://stackoverflow.com/questions/63199136/sending-csv-back-with-express
+                const url = window.URL.createObjectURL(new Blob([response],{type:"text/plain"}))
+                const a = document.createElement("a")
+                a.style.display = 'none'
+                a.href = url;
+                a.download = "usage_export.tsv"
+                document.body.appendChild(a)
+                a.click()
+                window.URL.revokeObjectURL(url)
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
@@ -302,15 +328,23 @@ $(function () {
         });
     }
     function requestExportResponses() {
+        console.log("got", current_responses)
         //Note: Do not call directly. Should only be called via the requestExport button.
         $.ajax({
             url: '/responses/tsv',
             type: 'POST',
-            data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
-            contentType: 'application/json',
+            data :{body: JSON.stringify(current_responses)},
             success: function (response) {
-                console.log("response")
-                //Does anything go here? Just making the post should complete it.
+                //https://javascript.info/blob //https://stackoverflow.com/questions/63199136/sending-csv-back-with-express
+                const url = window.URL.createObjectURL(new Blob([response],{type:"text/plain"}))
+                const a = document.createElement("a")
+                a.style.display = 'none'
+                a.href = url;
+                a.download = "response_export.tsv"
+                document.body.appendChild(a)
+                a.click()
+                window.URL.revokeObjectURL(url)
+
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
