@@ -57,9 +57,9 @@ $(function () {
     * This will increase initial load times slightly but will increase fluidity while running
     */
     function preLoadGeoJson() {
-        let geoRequests = []
+
         Object.keys(layers).forEach(el => {
-            let request =$.getJSON({
+            $.getJSON({
                 url: `geodata/${el}.json`,
                 contentType: 'application/json',
                 success: function (data) {
@@ -71,9 +71,7 @@ $(function () {
                     alert('Error - ' + errorMessage);
                 }
             })
-            geoRequests.push(request)
         })
-        return geoRequests
     }
 
 
