@@ -40,7 +40,7 @@ function validateSearchTerms(searchTerms)  {
     //console.log("validateSearchTerms array of searchTerms: ")
     //console.log(searchTerms)
     //These arrays contain all unique entries in our dataset for each column. We validate each search term individually below.
-    validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia'] //all the sets to input, will do later.
+    validGeo = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
     validAgeGroup = ['Total, 15 years and over', '15 to 24 years','25 to 34 years', '25 to 54 years', '35 to 44 years', '45 to 54 years', '55 to 64 years', '65 years and over', '65 to 74 years', '75 years and over' ] 
     validSex = ['Male', 'Female', 'Both sexes']
     validQuestion = ['Helps make more informed decisions', 'Helps to be more creative', 'Helps to communicate', 'Interferes with other things in life', 'Saves time' ]
@@ -51,39 +51,40 @@ function validateSearchTerms(searchTerms)  {
     // Using ternary operator to keep the number of lines manageable but not set on it.
     // If searchTerms['x'] is undefined, then don't validate & return true. Else, validate searchTerms['x'].
     let v1 = searchTerms['value'] == undefined ? true : validator.isFloat(searchTerms['value']) || validator.isInt(searchTerms['value'])
+
     let v2 = true  // This is true in case it's undefined.
-     if(searchTerms['geo'] != undefined) {
-        if(Array.isArray(searchTerms['geo']) == false){ //if not an array, use original code.
+    if (searchTerms['geo'] != undefined) {
+        if (Array.isArray(searchTerms['geo']) == false) { //if not an array, use original code.
             v2 = validator.isIn(searchTerms['geo'], validGeo)
         }
-        else{ //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
+        else { //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
             let truthy = [] //store the boolean true/falses of everything we forEach.
-            searchTerms['geo'].forEach(element => {truthy.push(validator.isIn(element, validGeo))});
+            searchTerms['geo'].forEach(element => { truthy.push(validator.isIn(element, validGeo)) });
 
             if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
-                v2 = true 
+                v2 = true
             }
 
             else {
-                v2= false
+                v2 = false
             }
         }
     }
     let v3 = true //this is true in case it's undefined.
-     if(searchTerms['ageGroup'] != undefined) {
-        if(Array.isArray(searchTerms['ageGroup']) == false){ //if not an array, use original code.
+    if (searchTerms['ageGroup'] != undefined) {
+        if (Array.isArray(searchTerms['ageGroup']) == false) { //if not an array, use original code.
             v3 = validator.isIn(searchTerms['ageGroup'], validAgeGroup)
         }
-        else{ //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
+        else { //if it is an array, use this new code, as validator only works with strings (aka, one element at a time)
             let truthy = [] //store the boolean true/falses of everything we forEach.
-            searchTerms['ageGroup'].forEach(element => {truthy.push(validator.isIn(element, validAgeGroup))});
+            searchTerms['ageGroup'].forEach(element => { truthy.push(validator.isIn(element, validAgeGroup)) });
 
             if (truthy.indexOf(false) == -1) { //if false is not present, all values are true and thus the query is valid. 
                 v3 = true
             }
 
             else {
-                v3= false
+                v3 = false
             }
         }
     }

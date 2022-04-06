@@ -1,4 +1,6 @@
 
+let current_responses = null
+let current_usages = null;
 
 $(function () {
 
@@ -8,9 +10,53 @@ $(function () {
     $(document).ready(function () {
         // Test setting the checkbox to know frontend.js is running
         $("#response_selector").prop("checked", "true")
-        $("#shared_canada_filter").prop("checked", "true")
+        
     });
-
+    $(".dataset_selector").change(function(){
+            if(this.id == "response_selector" && this.checked == true){
+            $("#response_specific_filters").show(600)
+            //show these filters again if they were hidden.
+            $("#shared_newfoundland_filter").show(600)
+            $('label[for="shared_newfoundland_filter"]').show(600) //This, amazingly, actually works. Praise to Stack Overflow for documenting better than the docs do.
+            $("#shared_pei_filter").show(600)
+            $('label[for="shared_pei_filter"]').show(600)
+            $("#shared_novascotia_filter").show(600)
+            $('label[for="shared_novascotia_filter"]').show(600)
+            $("#shared_newbrunswick_filter").show(600)
+            $('label[for="shared_newbrunswick_filter"]').show(600)
+            $("#shared_manitoba_filter").show(600)
+            $('label[for="shared_manitoba_filter"]').show(600)
+            $("#shared_saskatchewan_filter").show(600)
+            $('label[for="shared_saskatchewan_filter"]').show(600)
+            $("#shared_alberta_filter").show(600)
+            $('label[for="shared_alberta_filter"]').show(600)
+            }
+            else if(this.id == "response_selector" && this.checked == false){
+            $("#response_specific_filters").hide(1000)
+            //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user.
+            $("#shared_newfoundland_filter").hide(1000)
+            $('label[for="shared_newfoundland_filter"]').hide(1000) //This, amazingly, actually works. Praise to Stack Overflow for documenting better than the docs do.
+            $("#shared_pei_filter").hide(1000)
+            $('label[for="shared_pei_filter"]').hide(1000)
+            $("#shared_novascotia_filter").hide(1000)
+            $('label[for="shared_novascotia_filter"]').hide(1000)
+            $("#shared_newbrunswick_filter").hide(1000)
+            $('label[for="shared_newbrunswick_filter"]').hide(1000)
+            $("#shared_manitoba_filter").hide(1000)
+            $('label[for="shared_manitoba_filter"]').hide(1000)
+            $("#shared_saskatchewan_filter").hide(1000)
+            $('label[for="shared_saskatchewan_filter"]').hide(1000)
+            $("#shared_alberta_filter").hide(1000)
+            $('label[for="shared_alberta_filter"]').hide(1000)
+            }
+            else if(this.id == "usage_selector" && this.checked == true){
+            $("#usage_specific_filters").show(600)
+            }
+            else if(this.id == "usage_selector" && this.checked == false){
+            $("#usage_specific_filters").hide(1000)
+            
+            }
+        })
 
     //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
     $("#requestSearch").click(function(e){
@@ -112,7 +158,7 @@ $(function () {
             geo:geos,
             serviceType:serviceTypes, 
             ageGroup:ageGroupsUsages, 
-            income:incomes, 
+            //income:incomes, Had to remove for now. Was crashing server
         }
 
         let responsesSearch = {
@@ -127,9 +173,25 @@ $(function () {
         //code should go here to remove empty dictionary entries, unless we have a more elegant solution. 
         //I expect our validation code to throw an error if they remain, but it simplifies things considerably to have them included before this point.
  
-        if (response_selected){getResponses(responsesSearch)}
-        if (usage_selected){getUsages(usagesSearch)}
+        if (response_selected){
+            // We have to wait for the request to complete before using the responses
+            $.when(getResponses(responsesSearch)).done(()=>{
+                // We have the responses in here set to global variable current_response
+                console.log (current_responses)
+            })
+        }
+           
+        if (usage_selected){
+            // We have to wait for the request to complete before using the usages
+            $.when(getUsages(usagesSearch)).done(()=>{
+                //We have the usages here set to global variable current_usage
+                console.log (current_usages)
+            })
+        }
     });
+
+
+
     function handleAgeFilterValueUsage(incomingValue){
         //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
         let verification = ['Total, Internet users aged 15 years and over', 'Internet users aged 15 to 24 years', 'Internet users aged 25 to 44 years', 'Internet users aged 45 to 64 years', 'Internet users aged 65 years and over']
@@ -147,7 +209,7 @@ $(function () {
         if(incomingValue=='15+'){incomingValue=verification[0]}
         else if(incomingValue=='15-24'){incomingValue=verification[1]}
         else if(incomingValue=='25-44'){incomingValue=[verification[2],verification[4]]}
-        else if(incomingValue=='55-64'){incomingValue=verification[6]}
+        else if(incomingValue=='45-64'){incomingValue=verification[6]}
         else if(incomingValue=='65+'){incomingValue=verification[7]}
         return incomingValue
     }
@@ -158,46 +220,33 @@ $(function () {
         let verification = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick', 'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
         if(incomingValue=='CA'){incomingValue=verification[0]}
         else if(incomingValue=='Atlantic'){incomingValue=verification[1]}
-        else if(incomingValue=='NL'){incomingValue=[verification[2],verification[4]]}
-        else if(incomingValue=='PE'){incomingValue=verification[6]}
-        else if(incomingValue=='NS'){incomingValue=verification[7]}
-        else if(incomingValue=='NB'){incomingValue=verification[7]}
-        else if(incomingValue=='QC'){incomingValue=verification[7]}
-        else if(incomingValue=='ON+'){incomingValue=verification[7]}
-        else if(incomingValue=='Prairie'){incomingValue=verification[7]}
-        else if(incomingValue=='MB'){incomingValue=verification[7]}
-        else if(incomingValue=='SK'){incomingValue=verification[7]}
-        else if(incomingValue=='AB'){incomingValue=verification[7]}
-        else if(incomingValue=='BC'){incomingValue=verification[7]}
+        else if(incomingValue=='NL'){incomingValue=verification[2]}
+        else if(incomingValue=='PE'){incomingValue=verification[3]}
+        else if(incomingValue=='NS'){incomingValue=verification[4]}
+        else if(incomingValue=='NB'){incomingValue=verification[5]}
+        else if(incomingValue=='QC'){incomingValue=verification[6]}
+        else if(incomingValue=='ON'){incomingValue=verification[7]}
+        else if(incomingValue=='Prairie'){incomingValue=verification[8]}
+        else if(incomingValue=='MB'){incomingValue=verification[9]}
+        else if(incomingValue=='SK'){incomingValue=verification[10]}
+        else if(incomingValue=='AB'){incomingValue=verification[11]}
+        else if(incomingValue=='BC'){incomingValue=verification[12]}
+        console.log(incomingValue)
         return incomingValue
     }
     /**
      * Ajax function to get responses from the server to the frontend
      */
     function getResponses(data) {
-        // Sample call to responses
-        data = {
-            geo: 'Nova Scotia',
-            ageGroup: 'Total, 15 years and over',
-            sex: 'Female',
-            question: 'Helps to be more creative',
-            response: 'Rarely',
-        }
-        //console.log("Data for getResponses:", data)
-        let responses = [] // Array to store return values
-        $.ajax({
+
+        return $.ajax({
             url: '/responses',
             type: 'GET',
             data: data,
-            contentType: 'application/json',
+            dataType: "json",
             success: function (response) {
-                if (response = "no responses"){return response}
-                response.forEach(el => {
-                    console.log(JSON.stringify(el))
-                    responses.push(el)
-                })
-                console.log("Responses returning, contents:", responses)
-                return responses //This doesn't appear to work.
+                if (response == "no responses"){return response}
+                current_responses = response
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
@@ -205,32 +254,23 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
-        console.log("Responses:", responses)
+        
+        
     }
 
     /**
      * Ajax function to get usages from the server to the frontend
      */
     function getUsages(data) {
-        // Sample call to usages
-        data = {
-            geo: 'Canada', 
-            serviceType: 'Have access to the Internet at home', 
-            ageGroup: 'Total, Internet users aged 15 years and over', 
-            income: 'Total, household income quartiles', 
-        }
-        let usages = [] // Array to store return values
-        $.ajax({
+
+        return $.ajax({
             url: '/usages',
             type: 'GET',
             data: data,
-            contentType: 'application/json',
+            dataType: "json",
             success: function (response) {
-                response.forEach(el => {
-                    console.log(JSON.stringify(el))
-                    usages.push(el)
-                })
-                return usages
+                if (response == "no usages"){return response}
+                current_usages = response
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
@@ -238,7 +278,7 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
-        console.log("Usages:", usages)
+
     }
     function requestExportUsages() {
         //Note: Do not call directly. Should only be called via the requestExport button.
@@ -265,6 +305,7 @@ $(function () {
             data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
             contentType: 'application/json',
             success: function (response) {
+                console.log("response")
                 //Does anything go here? Just making the post should complete it.
             },
             //We can use the alert box to show if there's an error in the server-side

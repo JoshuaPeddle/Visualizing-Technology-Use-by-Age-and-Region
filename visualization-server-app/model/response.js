@@ -44,7 +44,49 @@ class Response {
 
         let collection = await _get_response_collection()
         searchTerms['value'] == undefined ? 0: searchTerms['value'] = parseFloat(searchTerms['value'])
-        let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+        // Handle get in array and as a string
+        let geos = []
+        if (Array.isArray(searchTerms['geo'])){
+            searchTerms['geo'].forEach(el=>{
+                geos.push({geo: el})
+        })
+        }else{
+            geos.push({geo: searchTerms['geo']})
+        }
+
+        // Handle edge case with ages
+        let ageFix =  [{ageGroup : searchTerms['ageGroup']}];
+        if (Array.isArray(searchTerms['ageGroup'])){
+            ageFix = [{ageGroup : searchTerms['ageGroup'][0]}];
+            if (searchTerms['ageGroup'].length >1 ){
+                ageFix = [{ageGroup: "25 to 34 years"},{ageGroup: "35 to 44 years"}]
+            }
+        }
+        let newsearchTerms = {  $and: [ {$or: ageFix} ,{$or: geos}    ],
+                         sex: searchTerms['sex'],
+                         question: searchTerms['question'],
+                         response: searchTerms['response'],
+                         estimate:  searchTerms['estimate'],
+                         unit:searchTerms['unit']
+                        }
+        // Remove empty keys keys
+        Object.keys(newsearchTerms).forEach(el=>{
+            if(newsearchTerms[el] == undefined){
+                delete newsearchTerms[el]
+            }
+        })
+       
+        // DO not look directly in it's eyes
+        // Cleaning up search terms for certain edge cases of ageGroup being undefined
+        if (newsearchTerms['$and'][0]['$or'][0]['ageGroup'] == undefined ){
+            delete newsearchTerms['$and']  // delete the problematic object 
+            // Re-add geos if it's defined
+            if(searchTerms['geo'] != undefined){
+                newsearchTerms['$or'] = geos
+            }
+        }
+        console.log(newsearchTerms)
+        let matching_responses = await collection.find(newsearchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
         console.log("found", matching_responses.length)
         return matching_responses;
     }

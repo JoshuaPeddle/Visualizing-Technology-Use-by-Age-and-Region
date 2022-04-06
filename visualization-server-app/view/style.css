@@ -14,7 +14,16 @@ body {
 #dataset_selectors {
     text-align: center;
 }
-
+#locations_container{
+    display:inline grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+    width: 55em;
+}
+#response_specific_filters{
+    display:inline grid;
+    grid-template-columns: auto auto auto;
+    width: 55em;  
+}
 #map {
     width: calc(100vw - 80px);
     height: calc(70vh - 80px);

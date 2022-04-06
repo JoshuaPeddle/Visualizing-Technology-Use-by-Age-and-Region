@@ -34,8 +34,41 @@ class Usage {
 
         let collection = await _get_usage_collection()
         // Check if 'value' is included in searchTerms, if so it may be a string so parse to float
-        searchTerms['value'] == undefined ? 0: searchTerms['value'] = parseFloat(searchTerms['value'])
-        let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+        searchTerms['value'] == undefined ? 0 : searchTerms['value'] = parseFloat(searchTerms['value'])
+        // Handle get in array and as a string
+        let geos = []
+        //If searchTerms['geo'] is an array,
+        if (Array.isArray(searchTerms['geo'])) {
+            searchTerms['geo'].forEach(el => {  // parse each separately
+                geos.push({ geo: el })
+            })
+        } else {
+            geos.push({ geo: searchTerms['geo'] })
+        }
+
+        let ageFix = searchTerms['ageGroup'];
+        if (Array.isArray(searchTerms['ageGroup'])) {
+            ageFix = searchTerms['ageGroup'][0];
+        }
+        let newsearchTerms = {
+            $or: geos,
+            ageGroup: ageFix,
+            serviceType: searchTerms['serviceType'],
+            response: searchTerms['response'],
+            income: searchTerms['income'],
+            unit: searchTerms['unit']
+        }
+        Object.keys(newsearchTerms).forEach(el=>{
+            if(newsearchTerms[el] == undefined){
+                delete newsearchTerms[el]
+            }
+        })
+        if (newsearchTerms['$or'][0]['geo'] == undefined ){
+
+            delete newsearchTerms['$or']
+        }
+        console.log(newsearchTerms)
+        let matching_responses = await collection.find(newsearchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
         console.log("found", matching_responses.length)
         return matching_responses;
     }

@@ -22,10 +22,17 @@ var map = L.map('map');
 
 $(function () {
 
-
+    // Configure that map and move it over Canada
     setupMap()
-
+    // Pre load the geoJSON from /geodata/ into layers
     preLoadGeoJson()
+    // Once ajax has finished loading the JSON, check a box and paint the map.
+    // If we do this before the geoJSON has finished loading the map wont paint the layer because it doesn't exist.
+    $(document).ajaxStop(function () {
+        // Turn on a location filter and this should paint the map
+        // Calling .change() triggers  $("input[title='locationFilter']").change() function from below
+        $("#shared_ontario_filter").prop("checked", "true").change()
+    });
 
 
     /**
@@ -50,6 +57,7 @@ $(function () {
     * This will increase initial load times slightly but will increase fluidity while running
     */
     function preLoadGeoJson() {
+
         Object.keys(layers).forEach(el => {
             $.getJSON({
                 url: `geodata/${el}.json`,
@@ -72,12 +80,12 @@ $(function () {
     * 
     */
     $("input[title='locationFilter']").change(function (event) {
-
-        let new_state = map.hasLayer(layers[this.value])
-        if (new_state == false) {
-            paintRegion(this.value)
+        // Check if box was ticked or not ticked
+        let new_state = $(this).prop("checked")
+        if (new_state == true) {
+            paintRegion(this.value) // If it was checked, paintRegion
         } else {
-            clearRegion(this.value)
+            clearRegion(this.value) // Else, clear region
         }
     })
 
