@@ -43,21 +43,32 @@ class Usage {
                 geos.push({ geo: el })
             })
         } else {
-            geos.push({ geos: searchTerms['geo'] })
+            geos.push({ geo: searchTerms['geo'] })
         }
 
         let ageFix = searchTerms['ageGroup'];
         if (Array.isArray(searchTerms['ageGroup'])) {
             ageFix = searchTerms['ageGroup'][0];
         }
-        searchTerms = {
+        let newsearchTerms = {
             $or: geos,
             ageGroup: ageFix,
             serviceType: searchTerms['serviceType'],
             response: searchTerms['response'],
+            income: searchTerms['income'],
+            unit: searchTerms['unit']
         }
+        Object.keys(newsearchTerms).forEach(el=>{
+            if(newsearchTerms[el] == undefined){
+                delete newsearchTerms[el]
+            }
+        })
+        if (newsearchTerms['$or'][0]['geo'] == undefined ){
 
-        let matching_responses = await collection.find(searchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
+            delete newsearchTerms['$or']
+        }
+        console.log(newsearchTerms)
+        let matching_responses = await collection.find(newsearchTerms).toArray(); //I think this is still a promise since there's no function declaration. It may be nessecary, though.
         console.log("found", matching_responses.length)
         return matching_responses;
     }
