@@ -89,11 +89,36 @@ $(function () {
         }
     })
 
+
+    function getColor(d) {
+        return d > 90 ? '#800026' :
+               d > 75  ? '#BD0026' :
+               d > 60  ? '#E31A1C' :
+               d > 45  ? '#FC4E2A' :
+               d > 30   ? '#FD8D3C' :
+               d > 15   ? '#FEB24C' :
+               d > 0   ? '#FED976' :
+                          '#FFEDA0';
+    }
+    function style(percent) {
+        
+        return {
+            fillColor: getColor(percent),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+
+
     /**
     * Function to paint the map with denoted by region.
     * Option are "AB", "Atlantic", "BC", ...
     */
-    function paintRegion(region) {
+    function paintRegion(region, percent) {
+        layers[region].setStyle(style(percent))
         layers[region].addTo(map)
     }
 
