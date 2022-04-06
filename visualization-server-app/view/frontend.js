@@ -1,4 +1,6 @@
 
+let current_responses = null
+let current_usages = null;
 
 $(function () {
 
@@ -149,9 +151,25 @@ $(function () {
         //code should go here to remove empty dictionary entries, unless we have a more elegant solution. 
         //I expect our validation code to throw an error if they remain, but it simplifies things considerably to have them included before this point.
  
-        if (response_selected){getResponses(responsesSearch)}
-        if (usage_selected){getUsages(usagesSearch)}
+        if (response_selected){
+            // We have to wait for the request to complete before using the responses
+            $.when(getResponses(responsesSearch)).done(()=>{
+                // We have the responses in here set to global variable current_response
+                console.log (current_responses)
+            })
+        }
+           
+        if (usage_selected){
+            // We have to wait for the request to complete before using the usages
+            $.when(getUsages(usagesSearch)).done(()=>{
+                //We have the usages here set to global variable current_usage
+                console.log (current_usages)
+            })
+        }
     });
+
+
+
     function handleAgeFilterValueUsage(incomingValue){
         //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
         let verification = ['Total, Internet users aged 15 years and over', 'Internet users aged 15 to 24 years', 'Internet users aged 25 to 44 years', 'Internet users aged 45 to 64 years', 'Internet users aged 65 years and over']
@@ -198,27 +216,15 @@ $(function () {
      * Ajax function to get responses from the server to the frontend
      */
     function getResponses(data) {
-        // Sample call to responses
-        data1 = {
-            geo: 'Nova Scotia',
-            ageGroup: 'Total, 15 years and over',
-            sex: 'Female',
-            question: 'Helps to be more creative',
-            response: 'Rarely',
-        }
-        //console.log("Data for getResponses:", data)
-        let responses = [] // Array to store return values
-        $.ajax({
+
+        return $.ajax({
             url: '/responses',
             type: 'GET',
             data: data,
             dataType: "json",
             success: function (response) {
                 if (response == "no responses"){return response}
-                response.forEach(el => {
-                    responses.push(el)
-                })
-                return responses //This doesn't appear to work.
+                current_responses = response
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
@@ -226,7 +232,7 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
-        console.log("Responses:", responses)
+        
         
     }
 
@@ -234,25 +240,15 @@ $(function () {
      * Ajax function to get usages from the server to the frontend
      */
     function getUsages(data) {
-        // Sample call to usages
-        data1 = {
-            geo: 'Canada', 
-            serviceType: 'Have access to the Internet at home', 
-            ageGroup: 'Total, Internet users aged 15 years and over', 
-            income: 'Total, household income quartiles', 
-        }
-        let usages = [] // Array to store return values
-        $.ajax({
+
+        return $.ajax({
             url: '/usages',
             type: 'GET',
             data: data,
             dataType: "json",
             success: function (response) {
                 if (response == "no usages"){return response}
-                response.forEach(el => {
-                    usages.push(el)
-                })
-                return usages
+                current_usages = response
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
@@ -260,7 +256,7 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
-        console.log("Usages:", usages)
+
     }
     function requestExportUsages() {
         //Note: Do not call directly. Should only be called via the requestExport button.
@@ -287,6 +283,7 @@ $(function () {
             data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
             contentType: 'application/json',
             success: function (response) {
+                console.log("response")
                 //Does anything go here? Just making the post should complete it.
             },
             //We can use the alert box to show if there's an error in the server-side
