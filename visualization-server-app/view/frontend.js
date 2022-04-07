@@ -39,7 +39,7 @@ $(function () {
             else if(this.id == "response_selector" && this.checked == false){
             response_selected=false
             $("#response_specific_filters").hide(1000)
-            //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user.
+            //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user. Also, deselect any checked boxes.
             $("#shared_newfoundland_filter").hide(1000)
             $('label[for="shared_newfoundland_filter"]').hide(1000) //This, amazingly, actually works. Praise to Stack Overflow for documenting better than the docs do.
             $("#shared_pei_filter").hide(1000)
@@ -54,6 +54,11 @@ $(function () {
             $('label[for="shared_saskatchewan_filter"]').hide(1000)
             $("#shared_alberta_filter").hide(1000)
             $('label[for="shared_alberta_filter"]').hide(1000)
+            $(".shared_filters").each(function(){
+                if(this.title == "locationFilter") {
+                    this.checked = false; //Bug: This doesn't remove already-painted map regions. However, trying to add this.trigger('change') also ruins unticking the box. 
+                }
+            })
             }
             else if(this.id == "usage_selector" && this.checked == true){
             usage_selected=true
@@ -153,7 +158,7 @@ $(function () {
             geo:geos,
             serviceType:serviceTypes, 
             ageGroup:ageGroupsUsages, 
-            //income:incomes, Had to remove for now. Was crashing server
+            //income:incomes, Had to remove for now. Was crashing server //We don't support searching by income anyways, so not a problem.
         }
 
         let responsesSearch = {
@@ -169,7 +174,7 @@ $(function () {
         if (response_selected){
             // We have to wait for the request to complete before using the responses
             $.when(getResponses(responsesSearch)).done(()=>{
-                // We have the responses in here set to global variable current_response
+                // We have the responses in here set to global variable current_responses
                 drawResponses(current_responses)
 
                 

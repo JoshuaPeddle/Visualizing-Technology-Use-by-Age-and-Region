@@ -38,7 +38,7 @@ $(function () {
     $(document).ajaxStop(function () {
         // Turn on a location filter and this should paint the map
         // Calling .change() triggers  $("input[title='locationFilter']").change() function from below
-        $("#shared_ontario_filter").prop("checked", "true").change()
+        //$("#shared_ontario_filter").prop("checked", "true").change()
     });
 
 
