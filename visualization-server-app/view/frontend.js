@@ -18,7 +18,6 @@ $(function () {
         
     });
     $(".dataset_selector").change(function(){
-            $("#requestExport").hide(600)
             if(this.id == "response_selector" && this.checked == true){
             response_selected=true
             $("#response_specific_filters").show(600)
@@ -39,6 +38,7 @@ $(function () {
             $('label[for="shared_alberta_filter"]').show(600)
             }
             else if(this.id == "response_selector" && this.checked == false){
+            $("#requestExport").hide(600)
             response_selected=false
             clearAllHighlights()
             $("#response_specific_filters").hide(1000)
@@ -69,6 +69,7 @@ $(function () {
             }
             else if(this.id == "usage_selector" && this.checked == false){
             usage_selected=false
+            $("#requestExport").hide(600)
             clearAllHighlights()
             $("#usage_specific_filters").hide(1000)
             
