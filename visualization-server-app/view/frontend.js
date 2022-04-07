@@ -1,5 +1,6 @@
 
-
+var usage_selected
+var response_selected
 
 let current_responses = null
 let current_usages = null;
@@ -17,6 +18,7 @@ $(function () {
     });
     $(".dataset_selector").change(function(){
             if(this.id == "response_selector" && this.checked == true){
+            response_selected=true
             $("#response_specific_filters").show(600)
             //show these filters again if they were hidden.
             $("#shared_newfoundland_filter").show(600)
@@ -35,6 +37,7 @@ $(function () {
             $('label[for="shared_alberta_filter"]').show(600)
             }
             else if(this.id == "response_selector" && this.checked == false){
+            response_selected=false
             $("#response_specific_filters").hide(1000)
             //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user.
             $("#shared_newfoundland_filter").hide(1000)
@@ -53,9 +56,11 @@ $(function () {
             $('label[for="shared_alberta_filter"]').hide(1000)
             }
             else if(this.id == "usage_selector" && this.checked == true){
+            usage_selected=true
             $("#usage_specific_filters").show(600)
             }
             else if(this.id == "usage_selector" && this.checked == false){
+            usage_selected=false
             $("#usage_specific_filters").hide(1000)
             
             }
@@ -68,7 +73,7 @@ $(function () {
         //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
         //geos must also now be translated, since we use Value for geojson on them. 
         let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],"","",[],[],"","",""] //this assigns all eight variables their own individual empty arrays on a single line.
-
+/* 
         //Set flags to false right before checking them, in case this is a second+ search.
         var response_selected = false
         var usage_selected = false
@@ -80,7 +85,7 @@ $(function () {
             usage_selected = true
             }
 
-        })
+        }) */
         let sharedFilters= $(".shared_filters")
         //Prepare Ages and Locations for the backend processing.
         sharedFilters.each(function(){
