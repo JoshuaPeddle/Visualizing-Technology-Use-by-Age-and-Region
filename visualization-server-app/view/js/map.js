@@ -40,7 +40,7 @@ $(function () {
     // If we do this before the geoJSON has finished loading the map wont paint the layer because it doesn't exist.
 
 
-    var info = L.control();
+    info = L.control();
 
     info.onAdd = function (map) {
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
