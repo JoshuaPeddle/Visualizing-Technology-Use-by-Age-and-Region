@@ -1,5 +1,6 @@
 
-
+var usage_selected
+var response_selected
 
 let current_responses = null
 let current_usages = null;
@@ -11,11 +12,13 @@ $(function () {
     */
     $(document).ready(function () {
         // Test setting the checkbox to know frontend.js is running
-        $("#response_selector").prop("checked", "true")
+        $("#response_selector").prop("checked", "true").change()
+        $("#usage_selector").change()
         
     });
     $(".dataset_selector").change(function(){
             if(this.id == "response_selector" && this.checked == true){
+            response_selected=true
             $("#response_specific_filters").show(600)
             //show these filters again if they were hidden.
             $("#shared_newfoundland_filter").show(600)
@@ -34,6 +37,7 @@ $(function () {
             $('label[for="shared_alberta_filter"]').show(600)
             }
             else if(this.id == "response_selector" && this.checked == false){
+            response_selected=false
             $("#response_specific_filters").hide(1000)
             //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user.
             $("#shared_newfoundland_filter").hide(1000)
@@ -52,15 +56,16 @@ $(function () {
             $('label[for="shared_alberta_filter"]').hide(1000)
             }
             else if(this.id == "usage_selector" && this.checked == true){
+            usage_selected=true
             $("#usage_specific_filters").show(600)
             }
             else if(this.id == "usage_selector" && this.checked == false){
+            usage_selected=false
             $("#usage_specific_filters").hide(1000)
             
             }
         })
 
-    //These should definitely not be set up like this. In reality, we need a "search" button and simply check all these on that button changing.
     $("#requestSearch").click(function(e){
         //functionality wise, to handle multiple selections, we pass arrays containing the search terms into usageSearch and responsesSearch. 
         //Later in this, we remove any key with only empty arrays.
@@ -69,10 +74,8 @@ $(function () {
         //geos must also now be translated, since we use Value for geojson on them. 
         let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],"","",[],[],"","",""] //this assigns all eight variables their own individual empty arrays on a single line.
 
-        //Set flags to false right before checking them, in case this is a second+ search.
-
         let sharedFilters= $(".shared_filters")
-        //some kind of each() code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
+        //Prepare Ages and Locations for the backend processing.
         sharedFilters.each(function(){
             let value = $(this).val()
             // Selectors
@@ -162,8 +165,6 @@ $(function () {
         }
         console.log(responsesSearch)
         console.log(usagesSearch)
-        //code should go here to remove empty dictionary entries, unless we have a more elegant solution. 
-        //I expect our validation code to throw an error if they remain, but it simplifies things considerably to have them included before this point.
  
         if (response_selected){
             // We have to wait for the request to complete before using the responses
