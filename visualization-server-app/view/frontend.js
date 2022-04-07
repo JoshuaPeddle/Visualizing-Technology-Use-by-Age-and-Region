@@ -38,6 +38,7 @@ $(function () {
             }
             else if(this.id == "response_selector" && this.checked == false){
             response_selected=false
+            clearAllHighlights()
             $("#response_specific_filters").hide(1000)
             //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user. Also, deselect any checked boxes.
             $("#shared_newfoundland_filter").hide(1000)
@@ -66,6 +67,7 @@ $(function () {
             }
             else if(this.id == "usage_selector" && this.checked == false){
             usage_selected=false
+            clearAllHighlights()
             $("#usage_specific_filters").hide(1000)
             
             }
@@ -78,7 +80,9 @@ $(function () {
         //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
         //geos must also now be translated, since we use Value for geojson on them. 
         let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],"","",[],[],"","",""] //this assigns all eight variables their own individual empty arrays on a single line.
-
+        if (!response_selected && !usage_selected){
+            alert("Select a dataset first")
+            return} // If no dataset is selected don't search
         let sharedFilters= $(".shared_filters")
         //Prepare Ages and Locations for the backend processing.
         sharedFilters.each(function(){
@@ -170,7 +174,9 @@ $(function () {
         }
         console.log(responsesSearch)
         console.log(usagesSearch)
- 
+        if (geos.length == 0){
+            alert("Select a location first")
+            return}// If no locations are selected. Don't search.
         if (response_selected){
             // We have to wait for the request to complete before using the responses
             $.when(getResponses(responsesSearch)).done(()=>{

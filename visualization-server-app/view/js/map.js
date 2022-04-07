@@ -27,6 +27,9 @@ var map = L.map('map', {
     minZoom: 3
 });
 
+//Popup variable
+var info;
+
 $(function () {
 
     // Configure that map and move it over Canada
@@ -35,12 +38,39 @@ $(function () {
     preLoadGeoJson()
     // Once ajax has finished loading the JSON, check a box and paint the map.
     // If we do this before the geoJSON has finished loading the map wont paint the layer because it doesn't exist.
-    $(document).ajaxStop(function () {
-        // Turn on a location filter and this should paint the map
-        // Calling .change() triggers  $("input[title='locationFilter']").change() function from below
-        //$("#shared_ontario_filter").prop("checked", "true").change()
-    });
 
+
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+        this.update();
+        return this._div;
+    };
+    
+    // method that we will use to update the control based on feature properties passed
+    info.update = function (props) {
+        // Added some logic here to be interactive with the user
+        if (!response_selected && !usage_selected){
+            this._div.innerHTML = '<h4>Select a dataset</h4>' ;
+            return
+        }
+        if (!current_responses && !current_usages){
+            this._div.innerHTML = '<h4>Complete a search</h4>' ;
+            return
+        }
+        if (props != undefined && props.value != undefined){ // If this region has been searched and value is populated
+            this._div.innerHTML = '<h4>Results from survey</h4>' +  (props ?
+                '<b>' + props.name + '</b><br />' + props.value + ' % '
+                : 'Hover over a region');
+        }else{
+            this._div.innerHTML = '<h4>Hover over a region</h4>' ;
+        }
+    };
+    $(document).ajaxStop(function(){
+        info.addTo(map);
+
+    })
 
     /**
      * This function does initial setup of the map and moves it to the correct location
@@ -73,7 +103,6 @@ $(function () {
                     layers[el] = L.geoJson(data,{
                         onEachFeature: onEachFeature
                     })
-                    console.log(layers[el])
                 },
                 error: function (xhr, status, error) {
                     var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -91,6 +120,7 @@ $(function () {
     $("input[title='locationFilter']").change(function (event) {
         // Check if box was ticked or not ticked
         let new_state = $(this).prop("checked")
+        info.update()
         if (new_state == true) {
             paintRegion(this.value) // If it was checked, paintRegion
         } else {
@@ -100,15 +130,15 @@ $(function () {
 
 
 
-       //https://leafletjs.com/SlavaUkraini/examples/choropleth/
-       function onEachFeature(feature, layer) {
+    //https://leafletjs.com/SlavaUkraini/examples/choropleth/
+    function onEachFeature(feature, layer) {
         layer.on({
             mouseover: highlightFeature,
             mouseout: resetHighlight,
         });
     }
 
-
+    // Called when the users mouse enters the highlighted region
     function highlightFeature(e) {
         var layer = e.target;
         //console.log(e)
@@ -118,25 +148,33 @@ $(function () {
             dashArray: '',
             fillOpacity: 0.7
         });
-    
+        info.update(layer.feature.properties);
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
         }
     }
 
-
+    // Called when the users mouse leaves the highlighted region
     function resetHighlight(e) {
         var layer = e.target;
         layer.setStyle({
             weight: 2,
             opacity: 1,
             color: 'white',
-            dashArray: '3',
+           dashArray: '3',
             fillOpacity: 0.7
         })
+        info.update();
         layer.options.weight=1
         //geojson.resetStyle(e.target);
     }
+
+
+  
+
+    
+
+
 
 
 });
@@ -176,7 +214,7 @@ function getColorHue(d) {
 }
 
 
-
+// Simple get color function
 function getColor(d) {
     return d > 90 ? '#800026' :
            d > 75  ? '#BD0026' :
@@ -199,8 +237,24 @@ function style(percent) {
     };
 }
 
+// Add a property to one of the layers
+function setLayerProperty(region, propertyName , value){
+    // This foreach handles the Prairie provence and Atlantic provence multi-region case
+    Object.keys(layers[region]._layers).forEach(el=>{
+        layers[region]._layers[el].feature.properties[propertyName] = value
+    })
+    
+}
+// fetch a property from one of the layers
+function getLayerProperty(region, propertyName){
+    return layers[region]._layers[Object.keys(layers[region]._layers)[0]].feature.properties[propertyName]
+}
+
+
+// Paint a region a specific color. Percent 0-100.
 function paintRegionPercent(region, percent) {
     layers[region].setStyle(style(percent))
+    setLayerProperty(region,"value", percent)
     layers[region].addTo(map)
 }
 /**
@@ -209,7 +263,7 @@ function paintRegionPercent(region, percent) {
 */
 
 function paintRegion(region, percent) {
-    layers[region].addTo(map)
+    layers[region].setStyle(style(0)).addTo(map)
 }
 
 /**
@@ -219,19 +273,41 @@ function paintRegion(region, percent) {
 function clearRegion(region) {
     map.removeLayer(layers[region])
 }
-
+// Pass an array of responses to have them displayed on the map
 function drawResponses(responses){
     responses.forEach(response =>{
+        
         // Need to check if the estimate is percentage of persons
         if (response.estimate == "Percentage of persons"){
+            console.log("painting",response)
             paintRegionPercent(handleGeoReverse(response.geo), response.value)
         }
     })
 }
-
+// Pass an array of usages to have them displayed on the map
 function drawUsages(usages){
      // No need to check anything. Can just draw
      usages.forEach(usage =>{
+        
+        if (usage.income == "Total, household income quartiles"){
+            console.log("painting",usage)
             paintRegionPercent(handleGeoReverse(usage.geo), usage.value)
+        }
+    })
+}
+// Call this to remove all painted regions
+function clearAllHighlights(){
+    Object.keys(layers).forEach(region=>{
+  
+        if (region != null || region != undefined){
+            //console.log(region)
+            try {
+                map.removeLayer(layers[region])
+            } catch (error) {
+                // Layer not loaded yet
+            }
+            
+        }
+        
     })
 }
