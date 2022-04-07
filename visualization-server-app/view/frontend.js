@@ -208,8 +208,8 @@ $(function () {
      */
     $("#requestExport").click(function(){
 
-        if (response_selected){requestExportResponses()}
-        if (usage_selected){requestExportUsages()}
+        if (response_selected && current_responses){requestExportResponses()}
+        if (usage_selected && current_usages){requestExportUsages()}
     })
 
 
