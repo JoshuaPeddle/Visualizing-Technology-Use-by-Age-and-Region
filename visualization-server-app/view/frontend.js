@@ -70,17 +70,7 @@ $(function () {
         let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],"","",[],[],"","",""] //this assigns all eight variables their own individual empty arrays on a single line.
 
         //Set flags to false right before checking them, in case this is a second+ search.
-        var response_selected = false
-        var usage_selected = false
-        $(".dataset_selector").each(function(){
-            if(this.title == "responseSelector" && this.checked == true){
-            response_selected = true
-            }
-            else if(this.title == "usageSelector" && this.checked == true){
-            usage_selected = true
-            }
 
-        })
         let sharedFilters= $(".shared_filters")
         //some kind of each() code for all of these, checking if checked == true? Could work if each is given a value attribute for what they should have.
         sharedFilters.each(function(){
@@ -200,17 +190,7 @@ $(function () {
      * Code for export button
      */
     $("#requestExport").click(function(){
-        let response_selected = false
-        let usage_selected = false
-        $(".dataset_selector").each(function(){
-            if(this.title == "responseSelector" && this.checked == true){
-            response_selected = true
-            }
-            else if(this.title == "usageSelector" && this.checked == true){
-            usage_selected = true
-            }
 
-        })
         if (response_selected){requestExportResponses()}
         if (usage_selected){requestExportUsages()}
     })
