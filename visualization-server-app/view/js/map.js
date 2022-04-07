@@ -18,7 +18,14 @@ var layers = {
     "YT": null,
 }
 
-var map = L.map('map');
+var map = L.map('map', {
+    zoomSnap: 0.1,
+    zoomDelta: 0.25,
+    wheelPxPerZoomLevel:1000, // Slow down zoom with mouse wheel
+    scrollWheelZoom: 'center', // Force zoom to zoom to the center of the map.
+    maxZoom: 5,
+    minZoom: 3
+});
 
 $(function () {
 
@@ -42,14 +49,14 @@ $(function () {
         /* Setup code for leafletjs map */
 
         var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            maxZoom: 18,
             id: 'mapbox/light-v9',
             tileSize: 512,
-            zoomOffset: -1
+            zoomOffset: -1,
         }).addTo(map);  // Add some context to it
         map.fitBounds([ // Move it over Canada
             [60, -125],
             [43, -55]]);
+        map.setZoom(4.5)
     }
 
     /**
@@ -63,7 +70,9 @@ $(function () {
                 url: `geodata/${el}.json`,
                 contentType: 'application/json',
                 success: function (data) {
-                    layers[el] = L.geoJson(data)
+                    layers[el] = L.geoJson(data,{
+                        onEachFeature: onEachFeature
+                    })
                     console.log(layers[el])
                 },
                 error: function (xhr, status, error) {
@@ -89,6 +98,45 @@ $(function () {
         }
     })
 
+
+
+       //https://leafletjs.com/SlavaUkraini/examples/choropleth/
+       function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+        });
+    }
+
+
+    function highlightFeature(e) {
+        var layer = e.target;
+        //console.log(e)
+        layer.setStyle({
+            weight: 4,
+            color: '#999',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
+    
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+    }
+
+
+    function resetHighlight(e) {
+        var layer = e.target;
+        layer.setStyle({
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        })
+        layer.options.weight=1
+        //geojson.resetStyle(e.target);
+    }
 
 
 });
@@ -151,14 +199,16 @@ function style(percent) {
     };
 }
 
-
+function paintRegionPercent(region, percent) {
+    layers[region].setStyle(style(percent))
+    layers[region].addTo(map)
+}
 /**
 * Function to paint the map with denoted by region.
 * Option are "AB", "Atlantic", "BC", ...
 */
 
 function paintRegion(region, percent) {
-    layers[region].setStyle(style(percent))
     layers[region].addTo(map)
 }
 
@@ -171,20 +221,17 @@ function clearRegion(region) {
 }
 
 function drawResponses(responses){
-    console.log("Map received", responses)
     responses.forEach(response =>{
         // Need to check if the estimate is percentage of persons
-        if (response.estimate = "Percentage of persons"){
-            paintRegion(handleGeoReverse(response.geo), response.value)
+        if (response.estimate == "Percentage of persons"){
+            paintRegionPercent(handleGeoReverse(response.geo), response.value)
         }
     })
 }
 
 function drawUsages(usages){
-    console.log("Map received", usages)
      // No need to check anything. Can just draw
      usages.forEach(usage =>{
-            paintRegion(handleGeoReverse(usage.geo), usage.value)
-        
+            paintRegionPercent(handleGeoReverse(usage.geo), usage.value)
     })
 }

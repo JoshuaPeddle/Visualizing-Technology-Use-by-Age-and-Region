@@ -73,19 +73,7 @@ $(function () {
         //Note that geos, while shared, depends on the disabling of geographical regions not shared by Usages and Responses so they are not in this input.
         //geos must also now be translated, since we use Value for geojson on them. 
         let [geos,sexes,serviceTypes,ageGroupsUsages,ageGroupsResponses,incomes,questions,responses] = [[],"","",[],[],"","",""] //this assigns all eight variables their own individual empty arrays on a single line.
-/* 
-        //Set flags to false right before checking them, in case this is a second+ search.
-        var response_selected = false
-        var usage_selected = false
-        $(".dataset_selector").each(function(){
-            if(this.title == "responseSelector" && this.checked == true){
-            response_selected = true
-            }
-            else if(this.title == "usageSelector" && this.checked == true){
-            usage_selected = true
-            }
 
-        }) */
         let sharedFilters= $(".shared_filters")
         //Prepare Ages and Locations for the backend processing.
         sharedFilters.each(function(){
@@ -199,6 +187,15 @@ $(function () {
     });
 
 
+    /**
+     * Code for export button
+     */
+    $("#requestExport").click(function(){
+
+        if (response_selected){requestExportResponses()}
+        if (usage_selected){requestExportUsages()}
+    })
+
 
     function handleAgeFilterValueUsage(incomingValue){
         //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
@@ -285,17 +282,24 @@ $(function () {
                 alert('Error - ' + errorMessage);
             }
         });
-
     }
     function requestExportUsages() {
+        console.log("got", current_responses)
         //Note: Do not call directly. Should only be called via the requestExport button.
         $.ajax({
             url: '/usages/tsv',
             type: 'POST',
-            data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
-            contentType: 'application/json',
+            data: {body: JSON.stringify(current_usages)},
             success: function (response) {
-                //Does anything go here? Just making the post should complete it.
+                //https://javascript.info/blob //https://stackoverflow.com/questions/63199136/sending-csv-back-with-express
+                const url = window.URL.createObjectURL(new Blob([response],{type:"text/plain"}))
+                const a = document.createElement("a")
+                a.style.display = 'none'
+                a.href = url;
+                a.download = "usage_export.tsv"
+                document.body.appendChild(a)
+                a.click()
+                window.URL.revokeObjectURL(url)
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
@@ -305,15 +309,23 @@ $(function () {
         });
     }
     function requestExportResponses() {
+        console.log("got", current_responses)
         //Note: Do not call directly. Should only be called via the requestExport button.
         $.ajax({
             url: '/responses/tsv',
             type: 'POST',
-            data: data, //TODO add search terms here. May be accessible from a global context, or may need a parameter.
-            contentType: 'application/json',
+            data :{body: JSON.stringify(current_responses)},
             success: function (response) {
-                console.log("response")
-                //Does anything go here? Just making the post should complete it.
+                //https://javascript.info/blob //https://stackoverflow.com/questions/63199136/sending-csv-back-with-express
+                const url = window.URL.createObjectURL(new Blob([response],{type:"text/plain"}))
+                const a = document.createElement("a")
+                a.style.display = 'none'
+                a.href = url;
+                a.download = "response_export.tsv"
+                document.body.appendChild(a)
+                a.click()
+                window.URL.revokeObjectURL(url)
+
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {

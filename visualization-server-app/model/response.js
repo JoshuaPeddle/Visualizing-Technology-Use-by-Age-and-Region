@@ -100,11 +100,10 @@ class Response {
            */
     static async toTSV(responses) {
         const filename = "/response_export.tsv"
-        const header = "Geo\tAge Group\tSex\tQuestion\tResponse\tEstimate\tuom\tValue"
+        const header = "Geo\tAge Group\tSex\tQuestion\tResponse\tEstimate\tuom\tValue\n"
         // Write the header
-        await fs.promises.writeFile('model' + filename, header, { flag: 'w' })
 
-        let to_write = ""
+        let to_write = header
         responses.forEach((el) => {
             // el is in string dict notation, use Object.values to get the Response objects
             let objs = Object.values(el)
@@ -117,10 +116,8 @@ class Response {
 
 
         })
-        await fs.promises.appendFile('model' + filename, to_write)
 
-        return __dirname + filename;
-
+        return to_write;
     }
 
 
