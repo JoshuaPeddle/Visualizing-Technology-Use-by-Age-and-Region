@@ -14,9 +14,11 @@ $(function () {
         // Test setting the checkbox to know frontend.js is running
         $("#response_selector").prop("checked", "true").change()
         $("#usage_selector").change()
+        $("#requestExport").hide(600)
         
     });
     $(".dataset_selector").change(function(){
+            $("#requestExport").hide(600)
             if(this.id == "response_selector" && this.checked == true){
             response_selected=true
             $("#response_specific_filters").show(600)
@@ -195,6 +197,8 @@ $(function () {
                 drawUsages(current_usages)
             })
         }
+        
+        $("#requestExport").show(600)
     });
 
 
