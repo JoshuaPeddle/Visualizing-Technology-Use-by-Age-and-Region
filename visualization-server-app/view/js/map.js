@@ -253,8 +253,6 @@ function style(percent, dataset, region) {
 
         if (!isNaN(val1) && !isNaN(val2) && val1 != undefined && val2 != undefined) {
             newtotal = (val1 + val2) / 2
-            console.log(val2 == undefined)
-            console.log(newtotal, val1, val2, "WTF")
             return {
                 fillColor: getColor(newtotal, 2),
                 weight: 2,
