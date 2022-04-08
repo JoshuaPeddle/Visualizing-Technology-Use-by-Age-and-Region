@@ -10,14 +10,11 @@ var layers = {
     "NL": null,
     "NS": null,
     "NB": null,
-    "NT": null,
-    "NU": null,
     "ON": null,
     "PE": null,
     "Prairie": null,
     "QC": null,
     "SK": null,
-    "YT": null,
 }
 
 // Configure a global var map. This is the base map object. 
