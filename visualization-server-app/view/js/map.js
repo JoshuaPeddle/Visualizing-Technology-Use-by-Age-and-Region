@@ -68,18 +68,22 @@ $(function () {
                 '<b>' + "Opinions on Technology" + '</b><br />' + props.responsevalue + ' % ' + '</b><br />' +
                 '<b>' + "Use of Technology by Age" + '</b><br />' + props.usagevalue + ' % '
                 : 'Hover over a region');
+                return
         } else if (props != undefined && props.value != undefined && props.response) { // If this region has been searched and value is populated
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + "Opinions on Technology" + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
+                return
         } else if (props != undefined && props.value != undefined && props.usage) { // If this region has been searched and value is populated
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + "Use of Technology by Age" + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
+                return
         } else if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + props.name + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
+                return
         }
         else {  // Dataset is selected, user has searched for, and retrieved data, but is not hovering anything
             this._div.innerHTML = '<h4>Hover over a region</h4>';
