@@ -264,6 +264,7 @@ $(function () {
             },
             //We can use the alert box to show if there's an error in the server-side
             error: function (xhr, status, error) {
+                if(xhr.status == 200){return} // Proper params but no usages returned
                 var errorMessage = xhr.status + ': ' + xhr.statusText
                 alert('Error - ' + errorMessage);
             }
