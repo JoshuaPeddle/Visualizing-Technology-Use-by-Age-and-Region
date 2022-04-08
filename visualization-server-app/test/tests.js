@@ -145,17 +145,6 @@ describe('Visualizing-Technology - Tests with Mocha', function () {
 
                 assert.strictEqual(res.data.length, 200); //200 results are returned, this is not an artifact of status(200)
             });
-
-            it('Usages failed retrieval - bad search params', async function () {
-                // construct a sample search with invalid search params
-                let sampleSearch = {
-                    geo: 'USA',
-                }
-                let res = await instance.get('/usages', { params: sampleSearch });
-                // This could be validated better //Could it?
-                assert.strictEqual(res.data, 'invalid query');   // Added error message to differentiate between empty query: 'no usages' and an invalid query: 'invalid query'
-            });
-          
             it('Comprehensive Filter Test - all filters return correctly.', async function () {
                 // construct a sample search with invalid search params
                 let sampleSearch = {
