@@ -60,23 +60,28 @@ $(function () {
             this._div.innerHTML = '<h4>Complete a search</h4>';
             return
         }
-        if (props != undefined && props.value != undefined && props.value == 0){ //  If value exists but is 0. User hasn't done search yet.
+        if (props != undefined && props.value != undefined && props.value == 0) { //  If value exists but is 0. User hasn't done search yet.
             this._div.innerHTML = '<h4>Complete a search</h4>';
             return
-        }else if (props != undefined && props.value != undefined && usage_selected && response_selected && props.response != undefined && props.usage != undefined) {
-            
+        } else if (props != undefined && props.value != undefined && usage_selected && response_selected && props.response != undefined && props.usage != undefined) {
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
-                '<b>' + "Opinions on Technology" + '</b><br />' + props.responsevalue + ' % '+ '</b><br />' +
+                '<b>' + "Opinions on Technology" + '</b><br />' + props.responsevalue + ' % ' + '</b><br />' +
                 '<b>' + "Use of Technology by Age" + '</b><br />' + props.usagevalue + ' % '
-
                 : 'Hover over a region');
-
-        }
-        else if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
+        } else if (props != undefined && props.value != undefined && props.response) { // If this region has been searched and value is populated
+            this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
+                '<b>' + "Opinions on Technology" + '</b><br />' + props.value + ' % '
+                : 'Hover over a region');
+        } else if (props != undefined && props.value != undefined && props.usage) { // If this region has been searched and value is populated
+            this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
+                '<b>' + "Use of Technology by Age" + '</b><br />' + props.value + ' % '
+                : 'Hover over a region');
+        } else if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + props.name + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
-        } else {  // Dataset is selected, user has searched for, and retrieved data, but is not hovering anything
+        }
+        else {  // Dataset is selected, user has searched for, and retrieved data, but is not hovering anything
             this._div.innerHTML = '<h4>Hover over a region</h4>';
         }
     };
@@ -197,8 +202,23 @@ function handleGeoReverse(incomingValue) {
 }
 
 // Get a color based on the value. Finer detail than getColorSimple. Implementation returns colors similar to getColorSimple
-function getColor(d) {
-    let red = parseInt(255 - d * 1)
+function getColor(d, alt) {
+
+    if (alt == 1){
+        let red = parseInt(160 - d * 1.4)
+        let green = parseInt(237 - (d * 2.2))
+        let blue = parseInt(255 - d * 2)
+        return `#${red.toString(16) + green.toString(16) + blue.toString(16)}`
+    }
+    
+    if (alt == 2){
+        let red = parseInt(237 - d * 2.2)
+        let green = parseInt(255 - (d * 2))
+        let blue = parseInt(160 - d * 1.4)
+        return `#${red.toString(16) + green.toString(16) + blue.toString(16)}`
+    }
+
+    let red = parseInt(255 - d * 2)
     let green = parseInt(237 - (d * 2.2))
     let blue = parseInt(160 - d * 1.4)
     return `#${red.toString(16) + green.toString(16) + blue.toString(16)}`
@@ -207,6 +227,7 @@ function getColor(d) {
 
 // Simple get color function
 function getColorSimple(d) {
+
     return d > 90 ? '#800026' :
            d > 75  ? '#BD0026' :
            d > 60  ? '#E31A1C' :
@@ -218,16 +239,56 @@ function getColorSimple(d) {
 }
 
 // Returns a style for the drawn region. Color is determined by percent
-function style(percent) {
-    
-    return {
-        fillColor: getColor(percent),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
+function style(percent, dataset, region) {
+    // If displaying a stack,
+ 
+    if (response_selected && current_responses && usage_selected && current_usages) {
+        let newtotal =percent 
+        let val1 =getLayerProperty(region,"responsevalue")
+        let val2 = getLayerProperty(region,"usagevalue")
+        if (val1 >0 && val2 > 0)
+        newtotal = (val1 +val2) /2
+
+        return {
+            fillColor: getColor(newtotal,2),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+
+    } else if (usage_selected && current_usages) {
+        return {
+            fillColor: getColor(percent, 1),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        }
+    }
+    else if (response_selected && current_responses) {
+        return {
+            fillColor: getColor(percent),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }else {
+        return {
+            fillColor: getColor(percent),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+
+   
 }
 
 // Add a property to one of the layers
@@ -251,12 +312,13 @@ function clearLayerProperty(region, propertyName) {
 
 // Paint a region a specific color. Percent 0-100.
 function paintRegionPercent(region, percent, dataset) {
-    layers[region].setStyle(style(percent))
+    
     setLayerProperty(region, "value", percent)
     if (dataset){
         setLayerProperty(region, dataset, dataset)
         setLayerProperty(region, dataset+"value", percent)
     }
+    layers[region].setStyle(style(percent, dataset, region))
     layers[region].addTo(map)
 }
 
