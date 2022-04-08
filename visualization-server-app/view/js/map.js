@@ -51,7 +51,6 @@ $(function () {
 
     // This method updates the overlay based on the properties of the layer that triggered the event
     overlay.update = function (props) {
-        if(!props){return} // This function gets a lot of undefined thrown at it from mouse events. Quickly ignore them
         // Added some logic here to be interactive with the user
         if (!response_selected && !usage_selected) {  // If neither dataset is selected
             this._div.innerHTML = '<h4>Select a dataset</h4>';
@@ -71,7 +70,6 @@ $(function () {
                 '<b>' + "Use of Technology by Age" + '</b><br />' + props.usagevalue + ' % '
 
                 : 'Hover over a region');
-
 
         }
         else if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
