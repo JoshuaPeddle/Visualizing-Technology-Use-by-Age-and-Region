@@ -245,16 +245,27 @@ function getColorSimple(d) {
 // Returns a style for the drawn region. Color is determined by percent
 function style(percent, dataset, region) {
     // If displaying a stack,
- 
-    if (response_selected && current_responses && usage_selected && current_usages) {
-        let newtotal =percent 
-        let val1 =getLayerProperty(region,"responsevalue")
-        let val2 = getLayerProperty(region,"usagevalue")
-        if (val1 >0 && val2 > 0)
-        newtotal = (val1 +val2) /2
 
+    if (response_selected && current_responses && usage_selected && current_usages) {
+        let newtotal = percent
+        let val1 = getLayerProperty(region, "responsevalue")
+        let val2 = getLayerProperty(region, "usagevalue")
+
+        if (!isNaN(val1) && !isNaN(val2) && val1 != undefined && val2 != undefined) {
+            newtotal = (val1 + val2) / 2
+            console.log(val2 == undefined)
+            console.log(newtotal, val1, val2, "WTF")
+            return {
+                fillColor: getColor(newtotal, 2),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
         return {
-            fillColor: getColor(newtotal,2),
+            fillColor: getColor(newtotal, 2),
             weight: 2,
             opacity: 1,
             color: 'white',
@@ -281,7 +292,7 @@ function style(percent, dataset, region) {
             dashArray: '3',
             fillOpacity: 0.7
         };
-    }else {
+    } else {
         return {
             fillColor: getColor(percent),
             weight: 2,
@@ -292,7 +303,7 @@ function style(percent, dataset, region) {
         };
     }
 
-   
+
 }
 
 // Add a property to one of the layers
