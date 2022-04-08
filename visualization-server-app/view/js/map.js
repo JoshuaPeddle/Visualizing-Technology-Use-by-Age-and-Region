@@ -179,21 +179,10 @@ $(function () {
 /// Need to parse geo from mongo style to getJSON style
 function handleGeoReverse(incomingValue) {
     //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
-    let verification = ['CA', 'Atlantic', 'NL', 'PE', 'NS', 'NB', 'QC', 'ON', 'Prairie', 'MB', 'SK', 'AB', 'BC']
-    if (incomingValue == 'Canada') { incomingValue = verification[0] }
-    else if (incomingValue == 'Atlantic provinces') { incomingValue = verification[1] }
-    else if (incomingValue == 'Newfoundland and Labrador') { incomingValue = verification[2] }
-    else if (incomingValue == 'Prince Edward Island') { incomingValue = verification[3] }
-    else if (incomingValue == 'Nova Scotia') { incomingValue = verification[4] }
-    else if (incomingValue == 'New Brunswick') { incomingValue = verification[5] }
-    else if (incomingValue == 'Quebec') { incomingValue = verification[6] }
-    else if (incomingValue == 'Ontario') { incomingValue = verification[7] }
-    else if (incomingValue == 'Prairie provinces') { incomingValue = verification[8] }
-    else if (incomingValue == 'Manitoba') { incomingValue = verification[9] }
-    else if (incomingValue == 'Saskatchewan') { incomingValue = verification[10] }
-    else if (incomingValue == 'Alberta') { incomingValue = verification[11] }
-    else if (incomingValue == 'British Columbia') { incomingValue = verification[12] }
-    return incomingValue
+    let outgoingValues = ['CA', 'Atlantic', 'NL', 'PE', 'NS', 'NB', 'QC', 'ON', 'Prairie', 'MB', 'SK', 'AB', 'BC']
+    let potentialIncomingValues = ['Canada', 'Atlantic provinces', 'Newfoundland and Labrador', 'Prince Edward Island', 'Nova Scotia', 'New Brunswick',
+        'Quebec', 'Ontario', 'Prairie provinces', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia']
+    return outgoingValues[potentialIncomingValues.indexOf(incomingValue)]
 }
 
 // Get a color based on the value. Finer detail than getColorSimple. Implementation returns colors similar to getColorSimple
@@ -272,7 +261,6 @@ function drawResponses(responses) {
     responses.forEach(response => {
         // Need to check if the estimate is percentage of persons
         if (response.estimate == "Percentage of persons") {
-            console.log("painting", response)
             paintRegionPercent(handleGeoReverse(response.geo), response.value)
         }
     })
@@ -283,7 +271,6 @@ function drawUsages(usages) {
     // No need to check anything. Can just draw
     usages.forEach(usage => {
         if (usage.income == "Total, household income quartiles") {
-            console.log("painting", usage)
             paintRegionPercent(handleGeoReverse(usage.geo), usage.value)
         }
     })
