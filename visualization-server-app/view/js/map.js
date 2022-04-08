@@ -1,4 +1,6 @@
-
+// This global variable loads the processed getJSON data.
+// Each object is preloaded at startup and is manipulated though setStyle()
+// For example Alberta can be drawn by calling paintRegion("AB") and cleared though clearRegion("AB")
 var layers = {
     "CA": null,
     "AB": null,
@@ -169,7 +171,6 @@ $(function () {
         })
         overlay.update();
         layer.options.weight = 1
-        //geojson.resetStyle(e.target);
     }
 
 
@@ -197,7 +198,6 @@ function handleGeoReverse(incomingValue) {
 
 // Get a color based on the value. Finer detail than getColorSimple. Implementation returns colors similar to getColorSimple
 function getColor(d) {
-
     let red = parseInt(255 - d * 1)
     let green = parseInt(237 - (d * 2.2))
     let blue = parseInt(160 - d * 1.4)
@@ -217,8 +217,9 @@ function getColorSimple(d) {
                       '#FFEDA0';
 }
 
+// Returns a style for the drawn region. Color is determined by percent
 function style(percent) {
-    // Returns a style for the drawn region. Color is determined by percent
+    
     return {
         fillColor: getColor(percent),
         weight: 2,
