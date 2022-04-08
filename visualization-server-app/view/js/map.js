@@ -1,6 +1,6 @@
 
 var layers = {
-    "CA":null,
+    "CA": null,
     "AB": null,
     "Atlantic": null,
     "BC": null,
@@ -22,7 +22,7 @@ var layers = {
 var map = L.map('map', {
     zoomSnap: 0.1, // Resolution of zoom levels. (zoom +- zoomSnap)
     zoomDelta: 0.25, // This is the zoom for the +- buttons
-    wheelPxPerZoomLevel:1000, // Slow down zoom with mouse wheel
+    wheelPxPerZoomLevel: 1000, // Slow down zoom with mouse wheel
     scrollWheelZoom: 'center', // Force zoom to zoom to the center of the map.
     maxZoom: 5,
     minZoom: 3
@@ -40,37 +40,38 @@ $(function () {
     // Once ajax has finished loading the JSON, check a box and paint the map.
     // If we do this before the geoJSON has finished loading the map wont paint the layer because it doesn't exist.
 
-
+    // Create our overlay Object
     overlay = L.control();
 
+    //When added to map.. do
     overlay.onAdd = function (map) {
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
         this.update();
         return this._div;
     };
-    
-    // method that we will use to update the control based on feature properties passed
+
+    // This method updates the overlay based on the properties of the layer that triggered the event
     overlay.update = function (props) {
         // Added some logic here to be interactive with the user
-        if (!response_selected && !usage_selected){
-            this._div.innerHTML = '<h4>Select a dataset</h4>' ;
+        if (!response_selected && !usage_selected) {  // If neither dataset is selected
+            this._div.innerHTML = '<h4>Select a dataset</h4>';
             return
         }
-        if (!current_responses && !current_usages){
-            this._div.innerHTML = '<h4>Complete a search</h4>' ;
+        if (!current_responses && !current_usages) {  // If no data has been retrieved via search yet
+            this._div.innerHTML = '<h4>Complete a search</h4>';
             return
         }
-        if (props != undefined && props.value != undefined){ // If this region has been searched and value is populated
-            this._div.innerHTML = '<h4>Results from survey</h4>' +  (props ?
+        if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
+            this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + props.name + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
-        }else{
-            this._div.innerHTML = '<h4>Hover over a region</h4>' ;
+        } else {  // Dataset is selected, user has searched for, and retrieved data, but is not hovering anything
+            this._div.innerHTML = '<h4>Hover over a region</h4>';
         }
     };
 
     // Once all ajax are finished, add the overlay to the map. This causes issued is it attempts to draw before geoJSON is loaded by json
-    $(document).ajaxStop(function(){
+    $(document).ajaxStop(function () {
         overlay.addTo(map);
 
     })
@@ -103,7 +104,7 @@ $(function () {
                 url: `geodata/${el}.json`,
                 contentType: 'application/json',
                 success: function (data) {
-                    layers[el] = L.geoJson(data,{
+                    layers[el] = L.geoJson(data, {
                         onEachFeature: onEachFeature // This assigned the functions defined in function onEachFeature() below to the layer
                     })
                 },
@@ -136,7 +137,7 @@ $(function () {
     //https://leafletjs.com/SlavaUkraini/examples/choropleth/
     function onEachFeature(feature, layer) {
         layer.on({
-            mouseover: highlightFeature, 
+            mouseover: highlightFeature,
             mouseout: resetHighlight,
         });
     }
@@ -163,11 +164,11 @@ $(function () {
             weight: 2,
             opacity: 1,
             color: 'white',
-           dashArray: '3',
+            dashArray: '3',
             fillOpacity: 0.7
         })
         overlay.update();
-        layer.options.weight=1
+        layer.options.weight = 1
         //geojson.resetStyle(e.target);
     }
 
@@ -175,32 +176,32 @@ $(function () {
 });
 
 /// Need to parse geo from mongo style to getJSON style
-function handleGeoReverse(incomingValue){
+function handleGeoReverse(incomingValue) {
     //If for some reason the back-end verification strings changed, this array would just need to be replaced. If length changed, more work would be required.
     let verification = ['CA', 'Atlantic', 'NL', 'PE', 'NS', 'NB', 'QC', 'ON', 'Prairie', 'MB', 'SK', 'AB', 'BC']
-    if(incomingValue=='Canada'){incomingValue=verification[0]}
-    else if(incomingValue=='Atlantic provinces'){incomingValue=verification[1]}
-    else if(incomingValue=='Newfoundland and Labrador'){incomingValue=verification[2]}
-    else if(incomingValue=='Prince Edward Island'){incomingValue=verification[3]}
-    else if(incomingValue=='Nova Scotia'){incomingValue=verification[4]}
-    else if(incomingValue=='New Brunswick'){incomingValue=verification[5]}
-    else if(incomingValue=='Quebec'){incomingValue=verification[6]}
-    else if(incomingValue=='Ontario'){incomingValue=verification[7]}
-    else if(incomingValue=='Prairie provinces'){incomingValue=verification[8]}
-    else if(incomingValue=='Manitoba'){incomingValue=verification[9]}
-    else if(incomingValue=='Saskatchewan'){incomingValue=verification[10]}
-    else if(incomingValue=='Alberta'){incomingValue=verification[11]}
-    else if(incomingValue=='British Columbia'){incomingValue=verification[12]}
+    if (incomingValue == 'Canada') { incomingValue = verification[0] }
+    else if (incomingValue == 'Atlantic provinces') { incomingValue = verification[1] }
+    else if (incomingValue == 'Newfoundland and Labrador') { incomingValue = verification[2] }
+    else if (incomingValue == 'Prince Edward Island') { incomingValue = verification[3] }
+    else if (incomingValue == 'Nova Scotia') { incomingValue = verification[4] }
+    else if (incomingValue == 'New Brunswick') { incomingValue = verification[5] }
+    else if (incomingValue == 'Quebec') { incomingValue = verification[6] }
+    else if (incomingValue == 'Ontario') { incomingValue = verification[7] }
+    else if (incomingValue == 'Prairie provinces') { incomingValue = verification[8] }
+    else if (incomingValue == 'Manitoba') { incomingValue = verification[9] }
+    else if (incomingValue == 'Saskatchewan') { incomingValue = verification[10] }
+    else if (incomingValue == 'Alberta') { incomingValue = verification[11] }
+    else if (incomingValue == 'British Columbia') { incomingValue = verification[12] }
     return incomingValue
 }
 
-// Get a color based on the value. FFiner detail than getColorSimple
+// Get a color based on the value. Finer detail than getColorSimple. Implementation returns colors similar to getColorSimple
 function getColor(d) {
 
-    let red = parseInt(255 -d*1)
-    let green = parseInt(237 - (d*2.2))
-    let blue = parseInt(160 - d*1.4)
-    return `#${red.toString(16)+green.toString(16)+blue.toString(16)}`
+    let red = parseInt(255 - d * 1)
+    let green = parseInt(237 - (d * 2.2))
+    let blue = parseInt(160 - d * 1.4)
+    return `#${red.toString(16) + green.toString(16) + blue.toString(16)}`
 }
 
 
@@ -215,6 +216,7 @@ function getColorSimple(d) {
            d > 0   ? '#FED976' :
                       '#FFEDA0';
 }
+
 function style(percent) {
     // Returns a style for the drawn region. Color is determined by percent
     return {
@@ -228,15 +230,15 @@ function style(percent) {
 }
 
 // Add a property to one of the layers
-function setLayerProperty(region, propertyName , value){
+function setLayerProperty(region, propertyName, value) {
     // This foreach handles the Prairie provence and Atlantic provence multi-region case
-    Object.keys(layers[region]._layers).forEach(el=>{
+    Object.keys(layers[region]._layers).forEach(el => {
         layers[region]._layers[el].feature.properties[propertyName] = value
     })
-    
+
 }
 // fetch a property from one of the layers
-function getLayerProperty(region, propertyName){
+function getLayerProperty(region, propertyName) {
     return layers[region]._layers[Object.keys(layers[region]._layers)[0]].feature.properties[propertyName]
 }
 
@@ -244,7 +246,7 @@ function getLayerProperty(region, propertyName){
 // Paint a region a specific color. Percent 0-100.
 function paintRegionPercent(region, percent) {
     layers[region].setStyle(style(percent))
-    setLayerProperty(region,"value", percent)
+    setLayerProperty(region, "value", percent)
     layers[region].addTo(map)
 }
 /**
@@ -263,41 +265,40 @@ function paintRegion(region, percent) {
 function clearRegion(region) {
     map.removeLayer(layers[region])
 }
+
 // Pass an array of responses to have them displayed on the map
-function drawResponses(responses){
-    responses.forEach(response =>{
-        
+function drawResponses(responses) {
+    responses.forEach(response => {
         // Need to check if the estimate is percentage of persons
-        if (response.estimate == "Percentage of persons"){
-            console.log("painting",response)
+        if (response.estimate == "Percentage of persons") {
+            console.log("painting", response)
             paintRegionPercent(handleGeoReverse(response.geo), response.value)
         }
     })
 }
+
 // Pass an array of usages to have them displayed on the map
-function drawUsages(usages){
-     // No need to check anything. Can just draw
-     usages.forEach(usage =>{
-        
-        if (usage.income == "Total, household income quartiles"){
-            console.log("painting",usage)
+function drawUsages(usages) {
+    // No need to check anything. Can just draw
+    usages.forEach(usage => {
+        if (usage.income == "Total, household income quartiles") {
+            console.log("painting", usage)
             paintRegionPercent(handleGeoReverse(usage.geo), usage.value)
         }
     })
 }
+
 // Call this to remove all painted regions
-function clearAllHighlights(){
-    Object.keys(layers).forEach(region=>{
-  
-        if (region != null || region != undefined){
-            //console.log(region)
+function clearAllHighlights() {
+    // For each region in layers, try to remove it. We can't fully reset the map because other things are added to it.
+    Object.keys(layers).forEach(region => {
+        if (region != null || region != undefined) {
+            // Layer might not be on map so do try catch
             try {
                 map.removeLayer(layers[region])
             } catch (error) {
                 // Layer not loaded yet
             }
-            
         }
-        
     })
 }
