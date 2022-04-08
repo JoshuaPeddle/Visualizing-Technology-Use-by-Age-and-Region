@@ -63,13 +63,13 @@ $(function () {
         if (props != undefined && props.value != undefined && props.value < 0) { //  If value exists but is 0. User hasn't done search yet.
             this._div.innerHTML = '<h4>Complete a search</h4>';
             return
-        } else if (props != undefined && props.value != undefined && usage_selected && response_selected && props.response != undefined && props.usage != undefined) {
+        } else if (props != undefined && props.value != undefined && props.response && props.usage ) {
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + "Opinions on Technology" + '</b><br />' + props.responsevalue + ' % ' + '</b><br />' +
                 '<b>' + "Use of Technology by Age" + '</b><br />' + props.usagevalue + ' % '
                 : 'Hover over a region');
                 return
-        } else if (props != undefined && props.value != undefined && props.response) { // If this region has been searched and value is populated
+        } else if (props != undefined && props.value != undefined && props.response) { // If this region has been searched and value is 
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + "Opinions on Technology" + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
@@ -146,8 +146,11 @@ $(function () {
         let new_state = $(this).prop("checked")
         overlay.update()   // Update the Overlay when location filters are checked. This updates the interactive messages to the user.
         if (new_state == true) {
-            
-            paintRegionPercent(this.value, getLayerProperty(this.value, "value") ? getLayerProperty(this.value, "value") : 0 ) // If it was checked, paintRegion
+            let existingValue = getLayerProperty(this.value, "value")
+            if (existingValue == undefined){
+                existingValue = 0;
+            }
+            paintRegionPercent(this.value,  existingValue ) // If it was checked, paintRegion
             
         } else {
             clearRegion(this.value) // Else, clear region
@@ -385,8 +388,9 @@ function clearAllHighlights() {
         if (region != null && region != undefined) {
             // Layer might not be on map so do try catch
             try {
-                console.log("clearLayerProperty")
                 clearLayerProperty(region, "value")
+                clearLayerProperty(region, "usage")
+                clearLayerProperty(region, "response")
                 map.removeLayer(layers[region])
             } catch (error) {
                 // Layer not loaded yet
