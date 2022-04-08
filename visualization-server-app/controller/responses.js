@@ -13,8 +13,10 @@ const keep_tsv = true //this is set to true for submission
  */
 module.exports.getResponses = async (req,res) =>{
     //need to get search dict from req
-    //console.log("req.query below")
-    //console.log(req.query)
+    // Enable caching of requests for responses
+    // Each requests url is unique and it can be assumed we wont be modifying individual values in our dataset.
+    // Therefore a long cache will reduce overall requests without affecting the end user
+    res.set('Cache-Control', 'public, max-age=31557600');
     let objs = await Response.getResponses(req.query);
     // This is just a simple check to see if anything was returned
     if (objs.length >=1){

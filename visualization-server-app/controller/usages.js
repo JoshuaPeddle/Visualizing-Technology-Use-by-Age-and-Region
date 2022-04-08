@@ -8,8 +8,10 @@ const keep_tsv = true //set to true for submission
 
 module.exports.getUsages = async (req, res) => {
     //need to get search dict from req
-    //console.log("Req.query Usages below")
-    //console.log(req.query)
+    // Enable caching of requests for usages
+    // Each requests url is unique and it can be assumed we wont be modifying individual values in our dataset.
+    // Therefore a long cache will reduce overall requests without affecting the end user
+    res.set('Cache-Control', 'public, max-age=31557600');  
     let objs = await Usage.getUsages(req.query);
     // This is just a simple check to see if anything was returned
     if (objs.length >= 1) {
