@@ -51,6 +51,7 @@ $(function () {
 
     // This method updates the overlay based on the properties of the layer that triggered the event
     overlay.update = function (props) {
+        if(!props){return} // This function gets a lot of undefined thrown at it from mouse events. Quickly ignore them
         // Added some logic here to be interactive with the user
         if (!response_selected && !usage_selected) {  // If neither dataset is selected
             this._div.innerHTML = '<h4>Select a dataset</h4>';
@@ -60,7 +61,20 @@ $(function () {
             this._div.innerHTML = '<h4>Complete a search</h4>';
             return
         }
-        if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
+        if (props != undefined && props.value != undefined && props.value == 0){ //  If value exists but is 0. User hasn't done search yet.
+            this._div.innerHTML = '<h4>Complete a search</h4>';
+            return
+        }else if (props != undefined && props.value != undefined && usage_selected && response_selected && props.response != undefined && props.usage != undefined) {
+            
+            this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
+                '<b>' + "Opinions on Technology" + '</b><br />' + props.responsevalue + ' % '+ '</b><br />' +
+                '<b>' + "Use of Technology by Age" + '</b><br />' + props.usagevalue + ' % '
+
+                : 'Hover over a region');
+
+
+        }
+        else if (props != undefined && props.value != undefined) { // If this region has been searched and value is populated
             this._div.innerHTML = '<h4>Results from survey</h4>' + (props ?
                 '<b>' + props.name + '</b><br />' + props.value + ' % '
                 : 'Hover over a region');
@@ -125,7 +139,9 @@ $(function () {
         let new_state = $(this).prop("checked")
         overlay.update()   // Update the Overlay when location filters are checked. This updates the interactive messages to the user.
         if (new_state == true) {
-            paintRegion(this.value) // If it was checked, paintRegion
+            
+            paintRegionPercent(this.value, getLayerProperty(this.value, "value") ? getLayerProperty(this.value, "value") : 0 ) // If it was checked, paintRegion
+            
         } else {
             clearRegion(this.value) // Else, clear region
         }
@@ -222,25 +238,34 @@ function setLayerProperty(region, propertyName, value) {
     Object.keys(layers[region]._layers).forEach(el => {
         layers[region]._layers[el].feature.properties[propertyName] = value
     })
-
 }
+
 // fetch a property from one of the layers
 function getLayerProperty(region, propertyName) {
     return layers[region]._layers[Object.keys(layers[region]._layers)[0]].feature.properties[propertyName]
 }
 
+// fetch a property from one of the layers
+function clearLayerProperty(region, propertyName) {
+    delete layers[region]._layers[Object.keys(layers[region]._layers)[0]].feature.properties[propertyName]
+}
+
 
 // Paint a region a specific color. Percent 0-100.
-function paintRegionPercent(region, percent) {
+function paintRegionPercent(region, percent, dataset) {
     layers[region].setStyle(style(percent))
     setLayerProperty(region, "value", percent)
+    if (dataset){
+        setLayerProperty(region, dataset, dataset)
+        setLayerProperty(region, dataset+"value", percent)
+    }
     layers[region].addTo(map)
 }
+
 /**
 * Function to paint the map with denoted by region.
 * Option are "AB", "Atlantic", "BC", ...
 */
-
 function paintRegion(region, percent) {
     layers[region].setStyle(style(0)).addTo(map)
 }
@@ -258,7 +283,7 @@ function drawResponses(responses) {
     responses.forEach(response => {
         // Need to check if the estimate is percentage of persons
         if (response.estimate == "Percentage of persons") {
-            paintRegionPercent(handleGeoReverse(response.geo), response.value)
+            paintRegionPercent(handleGeoReverse(response.geo), response.value, "response")
         }
     })
 }
@@ -268,7 +293,7 @@ function drawUsages(usages) {
     // No need to check anything. Can just draw
     usages.forEach(usage => {
         if (usage.income == "Total, household income quartiles") {
-            paintRegionPercent(handleGeoReverse(usage.geo), usage.value)
+            paintRegionPercent(handleGeoReverse(usage.geo), usage.value, "usage")
         }
     })
 }
@@ -277,9 +302,11 @@ function drawUsages(usages) {
 function clearAllHighlights() {
     // For each region in layers, try to remove it. We can't fully reset the map because other things are added to it.
     Object.keys(layers).forEach(region => {
-        if (region != null || region != undefined) {
+        if (region != null && region != undefined) {
             // Layer might not be on map so do try catch
             try {
+                console.log("clearLayerProperty")
+                clearLayerProperty(region, "value")
                 map.removeLayer(layers[region])
             } catch (error) {
                 // Layer not loaded yet

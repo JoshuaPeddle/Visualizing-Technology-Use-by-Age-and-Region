@@ -34,6 +34,7 @@ $(function () {
         else if (this.id == "response_selector" && this.checked == false) {
             $("#requestExport").hide(600)
             response_selected = false
+            current_responses = null
             clearAllHighlights()
             $("#response_specific_filters").hide(1000)
             //if not  'Canada', 'Atlantic provinces', 'Quebec', 'Ontario', 'Prairie provinces', 'British Columbia', hide! This will look better to the user. Also, deselect any checked boxes.
@@ -55,6 +56,7 @@ $(function () {
         }
         else if (this.id == "usage_selector" && this.checked == false) {
             usage_selected = false
+            current_usages = null
             $("#requestExport").hide(600)
             clearAllHighlights()
             $("#usage_specific_filters").hide(1000)
