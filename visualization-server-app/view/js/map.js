@@ -60,7 +60,7 @@ $(function () {
             this._div.innerHTML = '<h4>Complete a search</h4>';
             return
         }
-        if (props != undefined && props.value != undefined && props.value == 0) { //  If value exists but is 0. User hasn't done search yet.
+        if (props != undefined && props.value != undefined && props.value < 0) { //  If value exists but is 0. User hasn't done search yet.
             this._div.innerHTML = '<h4>Complete a search</h4>';
             return
         } else if (props != undefined && props.value != undefined && usage_selected && response_selected && props.response != undefined && props.usage != undefined) {
@@ -347,6 +347,10 @@ function drawResponses(responses) {
     responses.forEach(response => {
         // Need to check if the estimate is percentage of persons
         if (response.estimate == "Percentage of persons") {
+ 
+            if (response.value == null || response.value == undefined){
+                response.value = 0
+            }
             paintRegionPercent(handleGeoReverse(response.geo), response.value, "response")
         }
     })
@@ -357,6 +361,9 @@ function drawUsages(usages) {
     // No need to check anything. Can just draw
     usages.forEach(usage => {
         if (usage.income == "Total, household income quartiles") {
+            if (usage.value == null || usage.value == undefined){
+                usage.value = 0
+            }
             paintRegionPercent(handleGeoReverse(usage.geo), usage.value, "usage")
         }
     })
