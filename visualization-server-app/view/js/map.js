@@ -18,9 +18,10 @@ var layers = {
     "YT": null,
 }
 
+// Configure a global var map. This is the base map object. 
 var map = L.map('map', {
-    zoomSnap: 0.1,
-    zoomDelta: 0.25,
+    zoomSnap: 0.1, // Resolution of zoom levels. (zoom +- zoomSnap)
+    zoomDelta: 0.25, // This is the zoom for the +- buttons
     wheelPxPerZoomLevel:1000, // Slow down zoom with mouse wheel
     scrollWheelZoom: 'center', // Force zoom to zoom to the center of the map.
     maxZoom: 5,
@@ -28,7 +29,7 @@ var map = L.map('map', {
 });
 
 //Popup variable
-var info;
+var overlay;
 
 $(function () {
 
@@ -40,16 +41,16 @@ $(function () {
     // If we do this before the geoJSON has finished loading the map wont paint the layer because it doesn't exist.
 
 
-    info = L.control();
+    overlay = L.control();
 
-    info.onAdd = function (map) {
+    overlay.onAdd = function (map) {
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
         this.update();
         return this._div;
     };
     
     // method that we will use to update the control based on feature properties passed
-    info.update = function (props) {
+    overlay.update = function (props) {
         // Added some logic here to be interactive with the user
         if (!response_selected && !usage_selected){
             this._div.innerHTML = '<h4>Select a dataset</h4>' ;
@@ -67,8 +68,10 @@ $(function () {
             this._div.innerHTML = '<h4>Hover over a region</h4>' ;
         }
     };
+
+    // Once all ajax are finished, add the overlay to the map. This causes issued is it attempts to draw before geoJSON is loaded by json
     $(document).ajaxStop(function(){
-        info.addTo(map);
+        overlay.addTo(map);
 
     })
 
@@ -96,12 +99,12 @@ $(function () {
     function preLoadGeoJson() {
 
         Object.keys(layers).forEach(el => {
-            $.getJSON({
+            $.getJSON({                // using jquery getJSON method to read geoJSON
                 url: `geodata/${el}.json`,
                 contentType: 'application/json',
                 success: function (data) {
                     layers[el] = L.geoJson(data,{
-                        onEachFeature: onEachFeature
+                        onEachFeature: onEachFeature // This assigned the functions defined in function onEachFeature() below to the layer
                     })
                 },
                 error: function (xhr, status, error) {
@@ -120,7 +123,7 @@ $(function () {
     $("input[title='locationFilter']").change(function (event) {
         // Check if box was ticked or not ticked
         let new_state = $(this).prop("checked")
-        info.update()
+        overlay.update()   // Update the Overlay when location filters are checked. This updates the interactive messages to the user.
         if (new_state == true) {
             paintRegion(this.value) // If it was checked, paintRegion
         } else {
@@ -133,7 +136,7 @@ $(function () {
     //https://leafletjs.com/SlavaUkraini/examples/choropleth/
     function onEachFeature(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeature, 
             mouseout: resetHighlight,
         });
     }
@@ -141,14 +144,13 @@ $(function () {
     // Called when the users mouse enters the highlighted region
     function highlightFeature(e) {
         var layer = e.target;
-        //console.log(e)
         layer.setStyle({
             weight: 4,
             color: '#999',
             dashArray: '',
             fillOpacity: 0.7
         });
-        info.update(layer.feature.properties);
+        overlay.update(layer.feature.properties);
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
         }
@@ -164,17 +166,10 @@ $(function () {
            dashArray: '3',
             fillOpacity: 0.7
         })
-        info.update();
+        overlay.update();
         layer.options.weight=1
         //geojson.resetStyle(e.target);
     }
-
-
-  
-
-    
-
-
 
 
 });
@@ -199,23 +194,18 @@ function handleGeoReverse(incomingValue){
     return incomingValue
 }
 
-// Get a color based on the value. iIm going to change this to hue based approach for finer detail.
+// Get a color based on the value. FFiner detail than getColorSimple
+function getColor(d) {
 
-
-function getColorHue(d) {
-    return d > 90 ? '#800026' :
-           d > 75  ? '#BD0026' :
-           d > 60  ? '#E31A1C' :
-           d > 45  ? '#FC4E2A' :
-           d > 30   ? '#FD8D3C' :
-           d > 15   ? '#FEB24C' :
-           d > 0   ? '#FED976' :
-                      '#FFEDA0';
+    let red = parseInt(255 -d*1)
+    let green = parseInt(237 - (d*2.2))
+    let blue = parseInt(160 - d*1.4)
+    return `#${red.toString(16)+green.toString(16)+blue.toString(16)}`
 }
 
 
 // Simple get color function
-function getColor(d) {
+function getColorSimple(d) {
     return d > 90 ? '#800026' :
            d > 75  ? '#BD0026' :
            d > 60  ? '#E31A1C' :
